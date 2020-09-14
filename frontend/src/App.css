@@ -1,3 +1,5 @@
+@import 'antd/dist/antd.css';
+
 body{
   background: rgb(150, 214, 243);
   background: linear-gradient(90deg, rgba(54,217,182,1) 0%, rgba(32,152,126,1) 43%, rgba(0,212,255,1) 100%);
