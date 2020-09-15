@@ -1,4 +1,4 @@
-@import 'antd/dist/antd.css';
+@import '~antd/dist/antd.css';
 
 body{
   background: rgb(150, 214, 243);

@@ -1,64 +1,33 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework.viewsets import ModelViewSet
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .serializers import TaskSerializer
+from .serializers import (
+						UserSerializer
+						,TripInfoSerializer
+						,LoadingSerializer
+						,OffloadingSerializer
+						,TripSerializer
+					)
 
-from .models import Task
+from .models import Trip,Loading,Offloading,TripInfo
+
+
 # Create your views here.
+class LoadingViewSet(ModelViewSet):
+	serializer_class = LoadingSerializer
+	queryset = Loading.objects.all()
+	lookup_field = 'id'
 
-@api_view(['GET'])
-def apiOverview(request):
-	api_urls = {
-		'List':'/task-list/',
-		'Detail View':'/task-detail/<str:pk>/',
-		'Create':'/task-create/',
-		'Update':'/task-update/<str:pk>/',
-		'Delete':'/task-delete/<str:pk>/',
-		}
+class TripViewSet(ModelViewSet):
+	serializer_class = TripSerializer
+	queryset = Trip.objects.all()
+	lookup_field = 'id'
 
-	return Response(api_urls)
+class OffloadingViewSet(ModelViewSet):
+	serializer_class = OffloadingSerializer
+	queryset = Offloading.objects.all()
+	lookup_field = 'id'
 
-@api_view(['GET'])
-def taskList(request):
-	tasks = Task.objects.all().order_by('-id')
-	serializer = TaskSerializer(tasks, many=True)
-	return Response(serializer.data)
-
-@api_view(['GET'])
-def taskDetail(request, pk):
-	tasks = Task.objects.get(id=pk)
-	serializer = TaskSerializer(tasks, many=False)
-	return Response(serializer.data)
-
-
-@api_view(['POST'])
-def taskCreate(request):
-	serializer = TaskSerializer(data=request.data)
-
-	if serializer.is_valid():
-		serializer.save()
-
-	return Response(serializer.data)
-
-@api_view(['POST'])
-def taskUpdate(request, pk):
-	task = Task.objects.get(id=pk)
-	serializer = TaskSerializer(instance=task, data=request.data)
-
-	if serializer.is_valid():
-		serializer.save()
-
-	return Response(serializer.data)
-
-
-@api_view(['DELETE'])
-def taskDelete(request, pk):
-	task = Task.objects.get(id=pk)
-	task.delete()
-
-	return Response('Item succsesfully delete!')
-
-
-
+class TripInfoViewSet(ModelViewSet):
+	serializer_class = TripInfoSerializer
+	queryset = TripInfo.objects.all()
+	lookup_field = 'id'
