@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Trips/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

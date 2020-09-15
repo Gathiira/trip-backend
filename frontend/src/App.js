@@ -6,7 +6,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      todoList:[],
+      tripList:[],
       activeItem: {
         id:null,
         title:'',
@@ -45,11 +45,11 @@ class App extends React.Component {
   }
 
   fetchTasks(){
-    fetch('http://localhost:8000/api/task-list/')
+    fetch('http://localhost:8000/api/trip/')
     .then(response => response.json())
     .then(data => 
       this.setState({
-        todoList:data
+        tripList:data
       })
     )
   }
@@ -100,16 +100,16 @@ class App extends React.Component {
     })
   }
 
-  startEdit(task){
+  startEdit(trip){
     this.setState({
-      activeItem:task,
+      activeItem:trip,
       editing:true,
     })
   }
 
-  deleteItem(task){
+  deleteItem(trip){
     var csrftoken = this.getCookie('csrftoken')
-    var url = `http://localhost:8000/api/task-delete/${task.id}/`
+    var url = `http://localhost:8000/api/task-delete/${trip.id}/`
     fetch(url, {
       method:'DELETE',
       headers: {
@@ -121,10 +121,10 @@ class App extends React.Component {
     })
   }
 
-  strikeCompleted(task){
-    task.completed = !task.completed
+  strikeCompleted(trip){
+    trip.completed = !trip.completed
     var csrftoken = this.getCookie('csrftoken')
-    var url = `http://localhost:8000/api/task-update/${task.id}/`
+    var url = `http://localhost:8000/api/task-update/${trip.id}/`
 
     fetch(url, {
       method:'POST',  
@@ -133,8 +133,8 @@ class App extends React.Component {
         'X_CSRFToken':csrftoken,
       },
       body:JSON.stringify({
-        'title':task.title,
-        'completed':task.completed,
+        'title':trip.title,
+        'completed':trip.completed,
       })
     }).then((response)=> {
       this.fetchTasks()
@@ -142,7 +142,7 @@ class App extends React.Component {
   }
 
   render(){
-    var tasks = this.state.todoList
+    var trips = this.state.tripList
     var self = this
 
     return (
@@ -161,22 +161,22 @@ class App extends React.Component {
             </form>
           </div>
           <div id='list-wrapper'>
-            {tasks.map(function(task,index){
+            {trips.map(function(trip,index){
               return (
                 <div key={index} className='task-wrapper flex-wrapper'>
-                  <div onClick={() => self.strikeCompleted(task)} style={{flex:7}}>
-                    {task.completed ===false ?(
-                      <span>{ task.title}</span>
+                  <div onClick={() => self.strikeCompleted(trip)} style={{flex:7}}>
+                    {trip.completed ===false ?(
+                      <span>{ trip.title}</span>
                     ):(
-                      <strike>{ task.title}</strike>
+                      <strike>{ trip.title}</strike>
                     )}
                     
                   </div>
                   <div style={{flex:1}}>
-                    <button onClick={() => self.startEdit(task)} className='btn btn-sm btn-outline-info'>Edit</button>
+                    <button onClick={() => self.startEdit(trip)} className='btn btn-sm btn-outline-info'>Edit</button>
                   </div>
                   <div style={{flex:1}}>
-                  <button onClick={() => self.deleteItem(task)} className='btn btn-sm btn-outline-dark delete'>-</button>
+                  <button onClick={() => self.deleteItem(trip)} className='btn btn-sm btn-outline-dark delete'>-</button>
                   </div>
                 </div>
               )
