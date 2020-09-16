@@ -5,7 +5,6 @@ import {
 Link
 } from "react-router-dom";
 
-import Login from '../pages/Login';
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,10 +23,7 @@ const LayoutWithRoute = ({ children }) => {
         </Menu>
       </Header>
       <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-        </Breadcrumb>
+        <div><br/></div>
         <div className="site-layout-content">{children}</div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>©2020</Footer>
