@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './TripsTable.css';
-
 class TripsTable extends React.Component {
 
   constructor(props) {
@@ -28,6 +26,7 @@ class TripsTable extends React.Component {
 
   renderTableData(){
     return this.state.tripsList.map((trip, index) => {//destructuring
+
          return (
             <tr key={trip.id}>
                <td>{trip.title}</td>
