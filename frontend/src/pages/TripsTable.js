@@ -1,72 +1,115 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 
-class TripsTable extends React.Component {
+import Table from "./Table";
+import "../App.css";
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      tripsList:[],
-    }
+function TripsTable() {
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "title",
+        sort:'desc'
+      },
+      {
+        Header: "Loading Details",
+        columns: [
 
-    this.renderTableData = this.renderTableData.bind(this)
-  }
-  componentWillMount(){
-    this.fetchTrips()
-  }
+          {
+            Header: "Date",
+            accessor: "departure_date",
+            sort:'desc'
+          },
+          {
+            Header: "Buying Price/KG",
+            accessor: "buying_price_per_kg"
+          },
+          {
+            Header: "Total Weight Bought",
+            accessor: "total_weight_bought"
+          },
+          {
+            Header: "Total Buying Price",
+            accessor: "total_buying_price"
+          },
+          {
+            Header: "Loading cost",
+            accessor: "loading_cost"
+          }
+        ]
+      },
+      {
+        Header: "Additional Costs",
+        columns: [
+          {
+            Header: "Transport cost",
+            accessor: "trip_offloading.transport_cost"
+          },
+          {
+            Header: "Clearance cost",
+            accessor: "trip_offloading.clearance_cost"
+          },
+        ]
+      },
+      {
+        Header: "Offloading Details",
+        columns: [
+          {
+            Header: "Selling Date",
+            accessor: "trip_offloading.selling_date"
+          },
+          {
+            Header: "Selling Price/KG",
+            accessor: "trip_offloading.selling_price_per_kg"
+          },
+          {
+            Header: "Total Weight sold",
+            accessor: "trip_offloading.total_weight_sold",
+          },
+          {
+            Header: "Total Selling Price",
+            accessor: "trip_offloading.total_selling_price",
+          },
+          {
+            Header: "Offloading Cost",
+            accessor: "trip_offloading.offloading_cost",
+          },
+          {
+            Header: "Broker Expense",
+            accessor: "trip_offloading.broker_expenses",
+          },
+          {
+            Header: "Total Expenses",
+            accessor: "trip_offloading.total_expenses",
+          },
+        ]
+      },
+      {
+        Header: "Profit Margin",
+        accessor: "trip_offloading.profit_margin"
+      },
+    ],
+    []
+  );
 
-  fetchTrips(){
-    fetch('http://localhost:8000/api/loading/')
-    .then(response => response.json())
-    .then(data =>
-      this.setState({
-        tripsList:data
-      })
-    )
-  }
+  const [data, setData] = useState([]);
 
-  renderTableData(){
-    return this.state.tripsList.map((trip, index) => {//destructuring
+  useEffect(() => {
+    (async () => {
+      const result = await axios("http://localhost:8000/api/loading/");
+      setData(result.data);
+    })();
+  }, []);
 
-         return (
-            <tr key={trip.id}>
-               <td>{trip.departure_date}</td>
-               <td>{trip.title}</td>
-               <td>{trip.buying_price_per_kg}</td>
-               <td>{trip.total_weight_bought}</td>
-               <td>{trip.loading_cost}</td>
-               <td>{trip.trip_offloading.transport_cost}</td>
-               <td>{trip.trip_offloading.selling_price_per_kg}</td>
-               <td>{trip.trip_offloading.profit_margin}</td>
-            </tr>
-         )
-      })
-  }
-
-  render (){
-    return (
-      <div>
-        <h1 id='title'>Trip Information Center</h1>
-        <table id='trips'>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Buying Price</th>
-              <th>title</th>
-              <th>title</th>
-              <th>title</th>
-              <th>title</th>
-              <th>title</th>
-            </tr>
-          </thead>
-           <tbody>
-              <tr></tr>
-              {this.renderTableData()}
-           </tbody>
-        </table>
-     </div>
-    )
-  }
+  return (
+    <>
+    <div id='title-header'><h2>Information Center</h2></div>
+    <div className="container-fluid" id='table_data'>
+      <Table columns={columns} data={data} />
+    </div>
+    </>
+  );
 }
 
 export default TripsTable;

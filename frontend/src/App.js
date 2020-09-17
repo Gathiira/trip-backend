@@ -7,7 +7,6 @@ import WholeTrip from './pages/Trips'
 import Login from './pages/Login';
 import MainLayout from './layout/MainLayout';
 
-import Tmp from './pages/Tmp'
 
 class App extends React.Component {
 
@@ -21,7 +20,6 @@ class App extends React.Component {
     return (
       <MainLayout>
         <Switch>
-          <Route component={Tmp} path='/tmp' />
           <Route component={WholeTrip} path='/trip' />
           <Route component={Login} path='/login' />
           <Route component={Login} path='/logout' />
