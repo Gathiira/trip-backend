@@ -19,7 +19,7 @@ const LayoutWithRoute = ({ children }) => {
           <Menu.Item key="1"><Link to="/">Home</Link></Menu.Item>
           <Menu.Item key="2"><Link to="/login">Login</Link></Menu.Item>
           <Menu.Item key="3"><Link to="/logout">Logout</Link></Menu.Item>
-          <Menu.Item key="4"><Link to="/trip">Start Trip</Link></Menu.Item>
+          <Menu.Item key="4"><Link to="/trip">Record</Link></Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: '0 50px' }}>

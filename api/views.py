@@ -1,33 +1,27 @@
+from django.contrib.auth.models import User
+
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import (
 						UserSerializer
-						,TripInfoSerializer
-						,LoadingSerializer
-						,OffloadingSerializer
-						,TripSerializer
+						,TripLoadingSerializer
+						,TripOffloadingSerializer
 					)
-
-from .models import Trip,Loading,Offloading,TripInfo
+from .models import TripLoading,TripOffloading
 
 
 # Create your views here.
-class LoadingViewSet(ModelViewSet):
-	serializer_class = LoadingSerializer
-	queryset = Loading.objects.all()
+class UserViewSet(ModelViewSet):
+	serializer_class = UserSerializer
+	queryset = User.objects.all()
 	lookup_field = 'id'
 
-class TripViewSet(ModelViewSet):
-	serializer_class = TripSerializer
-	queryset = Trip.objects.all()
+class TripLoadingViewSet(ModelViewSet):
+	serializer_class = TripLoadingSerializer
+	queryset = TripLoading.objects.all()
 	lookup_field = 'id'
 
-class OffloadingViewSet(ModelViewSet):
-	serializer_class = OffloadingSerializer
-	queryset = Offloading.objects.all()
-	lookup_field = 'id'
-
-class TripInfoViewSet(ModelViewSet):
-	serializer_class = TripInfoSerializer
-	queryset = TripInfo.objects.all()
+class TripOffloadingViewSet(ModelViewSet):
+	serializer_class = TripOffloadingSerializer
+	queryset = TripOffloading.objects.all()
 	lookup_field = 'id'

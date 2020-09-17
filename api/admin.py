@@ -2,9 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Trip,TripInfo, Loading,Offloading
+from .models import TripLoading, TripOffloading
 
-admin.site.register(Trip)
-admin.site.register(TripInfo)
-admin.site.register(Loading)
-admin.site.register(Offloading)
+admin.site.register(TripLoading)
+admin.site.register(TripOffloading)

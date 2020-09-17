@@ -15,7 +15,7 @@ class TripsTable extends React.Component {
   }
 
   fetchTrips(){
-    fetch('http://localhost:8000/api/trip/')
+    fetch('http://localhost:8000/api/loading/')
     .then(response => response.json())
     .then(data =>
       this.setState({
@@ -29,13 +29,14 @@ class TripsTable extends React.Component {
 
          return (
             <tr key={trip.id}>
+               <td>{trip.departure_date}</td>
                <td>{trip.title}</td>
-               <td>{trip.created_on}</td>
-               <td>{trip.loading.buying_price_per_kg}</td>
-               <td>{trip.loading.total_weight_bought}</td>
-               <td>{trip.offloading.offloading_cost}</td>
-               <td>{trip.tripInfo.total_expenses}</td>
-               <td>{trip.tripInfo.profit_margin}</td>
+               <td>{trip.buying_price_per_kg}</td>
+               <td>{trip.total_weight_bought}</td>
+               <td>{trip.loading_cost}</td>
+               <td>{trip.trip_offloading.transport_cost}</td>
+               <td>{trip.trip_offloading.selling_price_per_kg}</td>
+               <td>{trip.trip_offloading.profit_margin}</td>
             </tr>
          )
       })
@@ -48,8 +49,9 @@ class TripsTable extends React.Component {
         <table id='trips'>
           <thead>
             <tr>
-              <th>title</th>
-              <th>title</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Buying Price</th>
               <th>title</th>
               <th>title</th>
               <th>title</th>

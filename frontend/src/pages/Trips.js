@@ -1,11 +1,15 @@
 import React from 'react';
 import {
   Form,
+  Select,
   Input,
   Button,
   DatePicker,
   InputNumber,
+  Tabs,
 } from 'antd';
+
+const { TabPane } = Tabs;
 
 const { TextArea } = Input;
 
@@ -19,81 +23,70 @@ const tailLayout = {
 
 class WholeTrip extends React.Component {
     render(){
-        return (
-            <div className="container">
-                <div id='task-container'>
-                    <div id='form-wrapper'>
-                      <Trips />
-                      <Loading />
-                      <Offloading />
-                      <TripInfo />
-                    </div>
-                </div>
+        return (<div className='container'>
+            <div className="card-container" >
+              <Tabs type="card" defaultActiveKey="1" centered>
+                <TabPane tab="Start Trip" key="1">
+                  <TripLoading />
+                </TabPane>
+                <TabPane tab="End Trip" key="2">
+                  <TripOffloading />
+                </TabPane>
+              </Tabs>
+            </div>
             </div>
         );
     }
 }
 
-class Trips extends React.Component {
+class TripLoading extends React.Component {
     render(){
         return (
           <div>
             <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal">
+            <Form.Item label="Departure Date">
+                <DatePicker />
+            </Form.Item>
             <Form.Item label="Trip name">
                 <Input />
             </Form.Item>
-            <Form.Item label="Date">
-                <DatePicker />
+            <Form.Item label="Buying Price per kg">
+                <InputNumber placeholder='16' />
             </Form.Item>
-            <Form.Item label="Comment">
-                <TextArea rows={4} />
+            <Form.Item label="Total Weight bought">
+                <InputNumber placeholder='28000' />
             </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
+            <Form.Item label="Total Loading Cost">
+                <InputNumber />
             </Form.Item>
+          <Form.Item label="Comment">
+              <TextArea placeholder='Enter relevant comment' rows={4} />
+          </Form.Item>
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
             </Form>
           </div>
         );
     }
 }
 
-class Loading extends React.Component {
+class TripOffloading extends React.Component {
     render(){
         return (
             <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal">
-              <Form.Item label="Buying Price per kg">
-                  <InputNumber />
+              <Form.Item label="Enter the trip to Offload">
+                <Select>
+                  <Select.Option value="trips">Trip 1</Select.Option>
+                </Select>
               </Form.Item>
-              <Form.Item label="Total Weight bought">
-                  <InputNumber />
-              </Form.Item>
-              <Form.Item label="Total Loading Cost">
-                  <InputNumber />
-              </Form.Item>
-              <Form.Item label="Departure Date">
+              <Form.Item label="Selling Date">
                   <DatePicker />
               </Form.Item>
-            <Form.Item label="Comment">
-                <TextArea rows={4} />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-            </Form>
-        );
-    }
-}
-
-class Offloading extends React.Component {
-    render(){
-        return (
-            <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal">
               <Form.Item label="Selling Price per kg">
-                  <InputNumber />
+                  <InputNumber placeholder='21' />
               </Form.Item>
               <Form.Item label="Total Weight sold">
                   <InputNumber />
@@ -101,45 +94,23 @@ class Offloading extends React.Component {
               <Form.Item label="Offloading cost">
                   <InputNumber />
               </Form.Item>
-              <Form.Item label="Selling Date">
-                  <DatePicker />
+              <Form.Item label="Transport Cost">
+                  <InputNumber placeholder='80000' />
               </Form.Item>
-            <Form.Item label="Comment">
-                <TextArea rows={4} />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
+              <Form.Item label="Clearance Cost">
+                  <InputNumber placeholder='9000' />
+              </Form.Item>
+              <Form.Item label="Comment">
+                  <TextArea placeholder='Enter relevant comment' rows={4} />
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
             </Form>
         );
     }
 }
-
-
-class TripInfo extends React.Component {
-    render(){
-        return (
-            <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal">
-            <Form.Item label="Transport Cost">
-                <InputNumber />
-            </Form.Item>
-            <Form.Item label="Clearance Cost">
-                <InputNumber />
-            </Form.Item>
-            <Form.Item label="Comment">
-                <TextArea rows={4} />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-            </Form>
-        );
-    }
-}
-
 
 export default WholeTrip;
