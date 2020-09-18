@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
-
-
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +150,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static')
 ]
+
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'knox.auth.TokenAuthentication',
+    ),
+}

@@ -1,5 +1,9 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { Form, Input, Button} from 'antd';
+import axios from "axios";
+
+
+
 const layout = {
   labelCol: {
     span: 8,
@@ -15,45 +19,73 @@ const tailLayout = {
   },
 };
 
-const Login = () => {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+class Login extends Component {
 
-  const onFinishFailed = (errorInfo) => {
+  state = {
+    username: '',
+    password: '',
+  }
+
+  onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
-  return (
-    <div className="container" >
-    <div className="form-container" >
-    <Form {...layout} name="basic" initialValues={{remember: true,}} onFinish={onFinish}
-      onFinishFailed={onFinishFailed}>
-      <Form.Item label="Username" name="username"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          }, ]}>
-          <Input placeholder='Enter your username'/>
-      </Form.Item>
+handleSubmit = e => {
+  e.preventDefault();
 
-      <Form.Item label="Password" name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },]}>
-         <Input.Password placeholder='**********'/>
-      </Form.Item>
+  const data = {
+    username:this.username,
+    password: this.password
+  }
 
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit"> Submit </Button>
-      </Form.Item>
-    </Form>
-  </div>
-  </div>
-  );
-};
+  axios.post('http://localhost:8000/api/login/', data)
+  .then(res=>{
+    console.log(res)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+}
+
+onChange = e => this.setState({[e.target.name]: e.target.value});
+
+
+
+  render() {
+    const { username, password } = this.state;
+
+    return (
+      <div className="col-md-6 m-auto" >
+        <div className = 'card card-body mt-5'>
+          <h2 className='text-center'>Login</h2>
+          <Form {...layout} name="nest-messages" initialValues={{remember: true,}}
+            onFinishFailed={this.onFinishFailed} onSubmit={this.handleSubmit}>
+            <Form.Item label="Username" name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                }, ]}>
+                <Input value={username} placeholder='Enter your username' onChange={this.onChange}/>
+            </Form.Item>
+
+            <Form.Item label="Password" name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },]}>
+               <Input.Password value={password} placeholder='**********' onChange={this.onChange}/>
+            </Form.Item>
+
+            <Form.Item {...tailLayout}>
+              <Button type="submit" htmlType="submit"> Login </Button>
+            </Form.Item>
+          </Form>
+        </div>
+    </div>
+    );
+  }
+}
 
 export default Login;

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Switch,Route} from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 
 import './App.css';
-import TripsTable from './pages/TripsTable';
-import WholeTrip from './pages/Trips'
-import Login from './pages/Login';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import MainLayout from './layout/MainLayout';
+import BaseRouter from './Routes';
 
 
 class App extends React.Component {
@@ -18,14 +17,13 @@ class App extends React.Component {
   render(){
 
     return (
-      <MainLayout>
-        <Switch>
-          <Route component={WholeTrip} path='/trip' />
-          <Route component={Login} path='/login' />
-          <Route component={Login} path='/logout' />
-          <Route component={TripsTable} exact path='/' />
-        </Switch>
-      </MainLayout>
+      <div className="App">
+        <Router>
+          <MainLayout>
+            <BaseRouter />
+          </MainLayout>
+        </Router>
+      </div>
 
     )
   }

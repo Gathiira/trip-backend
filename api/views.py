@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
-
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import permissions
 
 from .serializers import (
 						UserSerializer
@@ -9,17 +10,11 @@ from .serializers import (
 					)
 from .models import TripLoading,TripOffloading
 
-
-# Create your views here.
-class UserViewSet(ModelViewSet):
-	serializer_class = UserSerializer
-	queryset = User.objects.all()
-	lookup_field = 'id'
-
 class TripLoadingViewSet(ModelViewSet):
 	serializer_class = TripLoadingSerializer
 	queryset = TripLoading.objects.all()
 	lookup_field = 'id'
+	ordering ='departure_date'
 
 class TripOffloadingViewSet(ModelViewSet):
 	serializer_class = TripOffloadingSerializer

@@ -10,16 +10,14 @@ function TripsTable() {
       {
         Header: "Name",
         accessor: "title",
-        sort:'desc'
       },
       {
         Header: "Loading Details",
         columns: [
 
           {
-            Header: "Date",
+            Header: "Departure Date",
             accessor: "departure_date",
-            sort:'desc'
           },
           {
             Header: "Buying Price/KG",
@@ -97,16 +95,18 @@ function TripsTable() {
 
   useEffect(() => {
     (async () => {
-      const result = await axios("http://localhost:8000/api/loading/");
+      const result = await axios.get("http://localhost:8000/api/loading/");
       setData(result.data);
     })();
   }, []);
 
   return (
     <>
-    <div id='title-header'><h2>Information Center</h2></div>
-    <div className="container-fluid" id='table_data'>
-      <Table columns={columns} data={data} />
+    <div className="m-auto"  style={{ padding: '50px 0 0 0' }} >
+      <div className='text-center'><h2>Information Center</h2></div>
+      <div className="container-fluid" id='table_data'>
+        <Table columns={columns} data={data} />
+      </div>
     </div>
     </>
   );

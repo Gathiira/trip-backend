@@ -28,14 +28,7 @@ return (
             {headerGroup.headers.map(column => (
               <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
-                className={
-                  column.isSorted
-                    ? column.isSortedDesc
-                      ? "sort-desc"
-                      : "sort-asc"
-                    : ""
-                }
-              >
+                className={column.isSorted? column.isSortedDesc? "sort-desc": "sort-asc": ""} >
                 {column.render("Header")}
               </th>
             ))}
