@@ -15,7 +15,7 @@ class TripLoading(models.Model):
 	comment = models.TextField(default='Enter comment if any',blank=True) #user input
 
 	class Meta:
-		verbose_name_plural = "Start Trip Loading Details"
+		verbose_name_plural = "Loading Details"
 
 	def get_total_buying_price(self):
 		return self.buying_price_per_kg * self.total_weight_bought
@@ -52,7 +52,7 @@ class TripOffloading(models.Model):
 	comment = models.TextField(default='Enter comment if any',blank=True) #user input
 
 	class Meta:
-		verbose_name_plural = "End Trip Offloading Details"
+		verbose_name_plural = "Offloading Details"
 
 	def get_total_selling_price(self):
 		return self.selling_price_per_kg * self.total_weight_sold

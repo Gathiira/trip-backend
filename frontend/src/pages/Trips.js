@@ -1,34 +1,19 @@
 import React, {Component} from 'react';
 import {
-  Form,
-  Select,
-  Input,
-  Button,
-  DatePicker,
-  InputNumber,
   Tabs,
 } from 'antd';
 
 import axios from "axios";
 
+import './Trips.css';
 
 const { TabPane } = Tabs;
-
-const { TextArea } = Input;
-
-const tailLayout = {
-  wrapperCol: {
-    offset: 5,
-    span: 5,
-  },
-};
-
 
 class WholeTrip extends Component {
     render(){
         return (
-          <div className="col-md-6 m-auto" >
-            <div className = 'card card-body mt-5'>
+          <div className="container m-auto" >
+            <div className = 'card card-body'>
               <Tabs type="card" defaultActiveKey="1" centered>
                 <TabPane tab="Start Trip" key="1">
                   <TripLoading />
@@ -48,109 +33,247 @@ class TripLoading extends Component {
   constructor(props){
     super(props);
 
-    this.state = {};
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.state = {
+      departure_date:'',
+      buying_price_per_kg:'',
+      total_weight_bought:'',
+      loading_cost:'',
+      title:'',
+      comment:'',
+
+    };
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleFormSubmit = event => {
-  event.preventDefault();
-  console.log("Pressed")
-
-  const postObj = {
-    d_date : event.target.elements.d_date.value,
-    trip_name : event.target.elements.trip_name.value,
-    buying_price_per_kg : event.target.elements.buying_price_per_kg.value,
-    total_weight_bought : event.target.elements.total_weight_bought.value,
-    loading_cost : event.target.elements.loading_cost.value,
-    comment : event.target.elements.comment.value,
+  handleChange = e => {
+    this.setState({[e.target.name]:e.target.value })
   }
 
-  axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-  axios.defaults.xsrfCookieName = "csrftoken";
-  axios.defaults.headers = {
-    "Content-Type": "application/json",
-    Authorization: `Token ${this.props.token}`,
+  handleSubmit = event => {
+    event.preventDefault();
+    axios.post("http://localhost:8000/api/loading/",this.state)
+    .then(res => {
+      console.log(res.data)
+      alert("relax now, Data Captured")
+    })
+    .catch((err) => {
+      console.log(err)
+      alert(err)
+    })
   };
 
-     axios.post("http://localhost:8000/api/loading/", postObj)
-      .then(res => {
-        if (res.status === 201) {
-          this.props.history.push(`/`);
-        }
-      })
-};
-
   render(){
+    const {
+      title,
+      departure_date,
+      buying_price_per_kg,
+      total_weight_bought,
+      loading_cost,
+      comment
+    } = this.state;
       return (
-        <div className='container'>
-          <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal" method="post" onSubmit={this.handleFormSubmit} >
-            <Form.Item label="Departure Date">
-                <DatePicker name='d_date' style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Trip name">
-                <Input name='trip_name' style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Buying Price per kg">
-                <InputNumber name='buying_price_per_kg' style={{ width: '100%' }} placeholder='16' />
-            </Form.Item>
-            <Form.Item label="Total Weight bought">
-                <InputNumber name='total_weight_bought'  style={{ width: '100%' }} placeholder='28000' />
-            </Form.Item>
-            <Form.Item label="Loading Cost">
-                <InputNumber name='loading_cost'  style={{ width: '100%' }} placeholder='41000' />
-            </Form.Item>
-            <Form.Item label="Comment">
-                <TextArea name='comment' style={{ width: '100%' }} placeholder='Enter relevant comment' rows={4} />
-            </Form.Item>
-            <Form.Item  {...tailLayout}>
-             <Button style={{marginRight: '10px'}} type="primary" htmlType="submit">Submit</Button>
-            </Form.Item>
-          </Form>
+        <div className='form-container'>
+          <form onSubmit={this.handleSubmit}>
+            <label>Title:
+              <input
+                type="text"
+                name="title"
+                value={title}
+                onChange={this.handleChange} />
+            </label>
+            <label>Buying Price:
+              <input
+                type="number"
+                name="buying_price_per_kg"
+                value={buying_price_per_kg}
+                onChange={this.handleChange} />
+            </label>
+            <label>Weight Bought:
+              <input
+                type="number"
+                name="total_weight_bought"
+                value={total_weight_bought}
+                onChange={this.handleChange} />
+            </label>
+            <label>Loading Cost:
+              <input
+                type="number"
+                name="loading_cost"
+                min="100"
+                value={loading_cost}
+                onChange={this.handleChange} />
+            </label>
+            <label>Comment:
+              <textarea
+                type="text"
+                name="comment"
+                value={comment}
+                onChange={this.handleChange} />
+            </label>
+            <label>Departure date:
+              <input
+                type="date"
+                name="departure_date"
+                value={departure_date}
+                onChange={this.handleChange} />
+            </label>
+            <button type="submit" value="submit">Submit</button>
+          </form>
         </div>
       );
   }
 }
 
 class TripOffloading extends React.Component {
-    render(){
-        return (
-          <div className='container'>
-            <Form labelCol={{span: 5,}} wrapperCol={{span: 12,}} layout="horizontal">
-              <Form.Item label="Enter the trip to Offload">
-                <Select style={{ width: '100%' }} >
-                  <Select.Option value="trips">Trip 1</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="Selling Date">
-                  <DatePicker style={{ width: '100%' }}  />
-              </Form.Item>
-              <Form.Item label="Selling Price per kg">
-                  <InputNumber style={{ width: '100%' }}  placeholder='21' />
-              </Form.Item>
-              <Form.Item label="Total Weight sold">
-                  <InputNumber style={{ width: '100%' }}  />
-              </Form.Item>
-              <Form.Item label="Offloading cost">
-                  <InputNumber style={{ width: '100%' }}  />
-              </Form.Item>
-              <Form.Item label="Transport Cost">
-                  <InputNumber style={{ width: '100%' }}  placeholder='80000' />
-              </Form.Item>
-              <Form.Item label="Clearance Cost">
-                  <InputNumber style={{ width: '100%' }}  placeholder='9000' />
-              </Form.Item>
-              <Form.Item label="Comment">
-                  <TextArea style={{ width: '100%' }} placeholder='Enter relevant comment' rows={4} />
-              </Form.Item>
-              <Form.Item {...tailLayout}>
-                <Button style={{marginRight: '10px'}}  type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        );
-    }
+
+  constructor(props){
+    super(props);
+    this.state = {
+      trip_names:[],
+      offloading:{
+        'transport_cost':'80000',
+        'selling_date':'2020-09-09',
+        'comment':'lol',
+        'clearance_cost':'9000',
+        'selling_price_per_kg':'10',
+        'total_weight_sold':'28000',
+        'offloading_cost':'4500',
+        'broker_expenses':'18000',
+      },
+    };
+  }
+
+  componentDidMount() {
+    let initialTrips = [];
+    axios.get("http://localhost:8000/api/loading/")
+    .then(res => {
+      res.data.map((trip,id) => {
+        initialTrips.push(trip.title)
+        return trip
+      });
+      this.setState({
+          trip_names: initialTrips,
+      });
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  // handleChange = e => {
+  //   // this.setState({...this.state.offloading, e.target.name: e.target.value})
+  //   this.setState({offloading:{[e.target.name]:e.target.value }});
+  // }
+
+  handleChange(name) {
+    return e => {
+      this.setState(({ offloading }) => ({
+        offloading: { ...offloading, [name]: e.target.value }
+      }));
+    };
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
+    console.log(this.state.offloading)
+    axios.post("http://localhost:8000/api/offloading/",this.state.offloading)
+    .then(res => {
+      console.log(res.data)
+      alert("relax now, Data Captured")
+    })
+    .catch((err) => {
+      console.log(err)
+      alert(err)
+    })
+  }
+
+  render(){
+    let optionItems = this.state.trip_names.map((name,i) =>
+        <option key={i}>{name}</option>
+    );
+    const {
+      comment,
+      total_weight_sold,
+      selling_price_per_kg,
+      transport_cost,
+      clearance_cost,
+      offloading_cost,
+      selling_date,
+      broker_expenses,
+    } = this.state.offloading;
+      return (
+        <div className='form-container'>
+          <form onSubmit={this.handleSubmit}>
+            <label> Enter the trip to Offload:
+              <select>
+                {optionItems}
+              </select>
+            </label>
+            <label>Selling Price per Kg:
+              <input
+                type="number"
+                name="selling_price_per_kg"
+                value={selling_price_per_kg}
+                onChange={this.handleChange("selling_price_per_kg")} />
+            </label>
+            <label>Total Weight Sold:
+              <input
+                type="number"
+                name="total_weight_sold"
+                value={total_weight_sold}
+                onChange={this.handleChange("total_weight_sold")} />
+            </label>
+            <label>Offloading Cost:
+              <input
+                type="number"
+                name="offloading_cost"
+                value={offloading_cost}
+                onChange={this.handleChange("offloading_cost")} />
+            </label>
+            <label>Transport Cost:
+              <input
+                type="number"
+                name="transport_cost"
+                min="10"
+                value={transport_cost}
+                onChange={this.handleChange("transport_cost")} />
+            </label>
+            <label>Clearance Cost:
+              <input
+                type="number"
+                name="clearance_cost"
+                min="10"
+                value={clearance_cost}
+                onChange={this.handleChange("clearance_cost")} />
+            </label>
+            <label>Broker Expense:
+              <input
+                type="number"
+                name="broker_expenses"
+                min="10"
+                value={broker_expenses}
+                onChange={this.handleChange("broker_expenses")} />
+            </label>
+            <label>Comments:
+              <textarea
+                type="text"
+                name="comment"
+                value={comment}
+                onChange={this.handleChange("comment")} />
+            </label>
+            <label>Selling date:
+              <input
+                type="date"
+                name="selling_date"
+                value={selling_date}
+                onChange={this.handleChange("selling_date")} />
+            </label>
+            <button type="submit" value="submit">Submit</button>
+          </form>
+        </div>
+      );
+  }
 }
 
 export default WholeTrip;
