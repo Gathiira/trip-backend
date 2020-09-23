@@ -2,14 +2,6 @@
 
 body {margin: 0}
 
-#form-input-number {
-  width: 60px;
-}
-
-.flex-container {
-  display: flex;
-  width: 100%;
-}
 h2 {
   align-content: center;
   color: #1890FF;
@@ -41,24 +33,4 @@ table tr:nth-child(odd) {
 table th {
   position: sticky;
   background: #CACACA;
-}
-.card-container > .ant-tabs-card .ant-tabs-content {
-  margin-top: -16px;
-}
-.card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
-  background: #fff;
-  padding: 16px;
-}
-.card-container > .ant-tabs-card > .ant-tabs-nav::before {
-  display: none;
-}
-.card-container > .ant-tabs-card .ant-tabs-tab,
-[data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab {
-  border-color: transparent;
-  background: transparent;
-}
-.card-container > .ant-tabs-card .ant-tabs-tab-active,
-[data-theme='compact'] .card-container > .ant-tabs-card .ant-tabs-tab-active {
-  border-color: #fff;
-  background: #fff;
 }

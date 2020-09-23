@@ -6,10 +6,10 @@ class TripLoading(models.Model):
 	# id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	title = models.CharField(max_length=200, unique=True, help_text='Enter a unique name for the Trip') #user input
 
-	buying_price_per_kg = models.DecimalField(max_digits=8, decimal_places=2) #user input
-	total_weight_bought = models.IntegerField(default=0, help_text='Enter the total weight bought') #user input
-	total_buying_price = models.DecimalField(max_digits=8, decimal_places=2,default=1)
-	loading_cost = models.DecimalField(max_digits=8, decimal_places=2) #user input
+	buying_price_per_kg = models.DecimalField(max_digits=19,decimal_places=2,default=1) #user input
+	total_weight_bought = models.DecimalField(max_digits=19,decimal_places=2,default=1, help_text='Enter the total weight bought') #user input
+	total_buying_price = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	loading_cost = models.DecimalField(max_digits=19,decimal_places=2, default=1) #user input
 	departure_date = models.DateField() #user input
 
 	comment = models.TextField(default='Enter comment if any',blank=True) #user input
@@ -34,20 +34,20 @@ class TripLoading(models.Model):
 class TripOffloading(models.Model):
 	# End Trip offloading details
 	# id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	trip_loading = models.OneToOneField(TripLoading, on_delete=models.CASCADE, blank=False, related_name='trip_offloading')
+	trip_loading = models.OneToOneField(TripLoading, on_delete=models.CASCADE, blank=False, related_name='trip_offloading') # user select
 
-	transport_cost = models.DecimalField(max_digits=8, decimal_places=2, default=80000) #user input
-	clearance_cost = models.DecimalField(max_digits=8, decimal_places=2, default=9000) #user input
+	transport_cost = models.DecimalField(max_digits=19,decimal_places=2, default=80000) #user input
+	clearance_cost = models.DecimalField(max_digits=19,decimal_places=2, default=9000) #user input
 
-	selling_price_per_kg = models.DecimalField(max_digits=8, decimal_places=2) #user input
-	total_weight_sold = models.IntegerField(default=0, help_text='Enter the total weight sold') #user input
-	total_selling_price = models.DecimalField(max_digits=8, decimal_places=2,default=1)
-	offloading_cost = models.DecimalField(max_digits=8, decimal_places=2) #user input
+	selling_price_per_kg = models.DecimalField(max_digits=19,decimal_places=2) #user input
+	total_weight_sold = models.DecimalField(max_digits=19,decimal_places=2,default=1, help_text='Enter the total weight sold') #user input
+	total_selling_price = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	offloading_cost = models.DecimalField(max_digits=19,decimal_places=2) #user input
 	selling_date = models.DateField() #user input
 
-	broker_expenses = models.DecimalField(max_digits=8, decimal_places=2) #user input
-	total_expenses = models.DecimalField(max_digits=8, decimal_places=2,default=1)
-	profit_margin = models.DecimalField(max_digits=8, decimal_places=2,default=1)
+	broker_expenses = models.DecimalField(max_digits=19,decimal_places=2) #user input
+	total_expenses = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	profit_margin = models.DecimalField(max_digits=19,decimal_places=2,default=1)
 
 	comment = models.TextField(default='Enter comment if any',blank=True) #user input
 

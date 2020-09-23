@@ -102,10 +102,12 @@ function TripsTable() {
 
   return (
     <>
-    <div className="m-auto"  style={{ padding: '50px 0 0 0' }} >
-      <div className='text-center'><h2>Information Center</h2></div>
-      <div className="container-fluid" id='table_data'>
-        <Table columns={columns} data={data} />
+    <div className="m-auto">
+      <div className='card card-body mt-5'>
+        <div className='text-center'><h2>Information Center</h2></div>
+        <div id='table_data'>
+          <Table columns={columns} data={data} />
+        </div>
       </div>
     </div>
     </>

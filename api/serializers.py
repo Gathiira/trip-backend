@@ -22,21 +22,16 @@ class TripOffloadingSerializer(serializers.ModelSerializer):
 		
 		extra_kwargs = {
 			'id': {'write_only': True},
-			'trip_loading': {'write_only': True},
 		}
 
 class TripLoadingSerializer(serializers.HyperlinkedModelSerializer):
 	trip_offloading =  TripOffloadingSerializer(read_only=True)
 	class Meta:
 		model = TripLoading
-		fields =['title','buying_price_per_kg','total_weight_bought'
+		fields =['id','title','buying_price_per_kg','total_weight_bought'
 				,'total_buying_price','loading_cost'
 				,'departure_date','comment','trip_offloading']
 		read_only_fields = ['total_buying_price']
-		
-		extra_kwargs = {
-			'id': {'write_only': True},
-		}
 
 
 # class TripSerializer(serializers.HyperlinkedModelSerializer):
