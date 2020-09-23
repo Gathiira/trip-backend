@@ -1,15 +1,9 @@
 import React from 'react';
-
 import { Layout } from 'antd';
-import {
-Link
-} from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { Navbar,Nav } from 'react-bootstrap';
 
-
 const { Content, Footer } = Layout;
-
 
 const LayoutWithRoute = ({ children }) => {
   return (
