@@ -9,19 +9,12 @@ export function PostData(type, userData) {
     .then((response) => response.data)
     .then((responseJson) => {
       resolve(responseJson);
+      console.log(responseJson)
     })
     .catch((error) =>{
       reject(error);
+      alert('Wrong credentials, Please try again')
     })
   });
 
 }
-
-
-//
-// .then(res=>{
-//   console.log(res.data)
-// })
-// .catch(err=>{
-//   console.log(err)
-// })

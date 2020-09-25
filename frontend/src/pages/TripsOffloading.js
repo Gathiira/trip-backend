@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { ApiCall } from './ApiCall';
 
 import OffloadingForm from './OffloadingForm';
 
@@ -13,7 +13,7 @@ class TripsLoading extends Component {
 
   componentDidMount() {
     let initialTrips = [];
-    axios.get("http://localhost:8000/api/loading/")
+    ApiCall("loading/",'')
     .then(res => {
       res.data.map((trip,id) => {
         initialTrips.push(trip.id)

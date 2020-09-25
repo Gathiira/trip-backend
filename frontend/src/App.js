@@ -1,10 +1,10 @@
 import React from 'react';
-import { HashRouter as Router, Redirect } from "react-router-dom";
+import {Redirect } from "react-router-dom";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import MainLayout from './layout/MainLayout';
-import BaseRouter from './Routes';
+
+import TripsTable from './pages/TripsTable';
 
 
 class App extends React.Component {
@@ -29,6 +29,7 @@ class App extends React.Component {
   handleLogout() {
     sessionStorage.setItem("user","");
     sessionStorage.clear();
+    this.setState({redirect:true})
   }
 
   render(){
@@ -37,13 +38,9 @@ class App extends React.Component {
     }
     return (
       <div className="App">
-        <Router>
-          <MainLayout>
-            <BaseRouter />
-          </MainLayout>
-        </Router>
+        <TripsTable />
+        <button onClick={this.handleLogout}>Logout</button>
       </div>
-
     )
   }
 }

@@ -1,8 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
-import axios from "axios";
 
 import Table from "./Table";
 import "../App.css";
+
+import { ApiCall } from './ApiCall';
+
 
 function TripsTable() {
   const columns = useMemo(
@@ -94,10 +96,10 @@ function TripsTable() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      const result = await axios.get("http://localhost:8000/api/loading/");
-      setData(result.data);
-    })();
+    ApiCall("loading/",'').then((result) =>{
+      let responseJson = result;
+      setData(responseJson.data);
+    })
   }, []);
 
   return (
