@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import {Redirect } from "react-router-dom";
 import { Layout } from 'antd';
 import { Link } from "react-router-dom";
 import { Navbar,Nav } from 'react-bootstrap';
@@ -9,26 +10,72 @@ class MainLayout extends Component {
   render(){
     return(
       <>
-        <Layout className="header">
+        {(sessionStorage.getItem("user"))?(
+            <Header />
+        ) : (
+          <Layout className="header">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-              <Navbar.Brand href="/">SMOKIN' ACE</Navbar.Brand>
+              <Navbar.Brand href="">SMOKIN' ACE</Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
-                  <Link className='nav-link' to="/">Home</Link>
-                  <Link className='nav-link' to="/trip">Record</Link>
-                  <Link className='nav-link' to="/">Shares</Link>
-                  {(sessionStorage.getItem("user"))?(
-                    <Link className='nav-link' to="/login">Logout</Link>
-                  ) : (
-                    <Link className='nav-link' to="/login">Login</Link>
-                  )}
+                <Link className='nav-link' to="/">Home</Link>
+                <Link className='nav-link' to="/trip">Record</Link>
+                <Link className='nav-link' to="/">Shares</Link>
+                <Link className='nav-link' to="/login">Login</Link>
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
-        </Layout>
+          </Layout>
+        )}
         <Body content={this.props.children}/>
       </>
+    );
+  }
+}
+class Header extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      redirect:false,
+    }
+
+    this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  componentDidMount(){
+    if (sessionStorage.getItem("user")) {
+      console.log("user is authenticated, call user feed")
+    } else {
+      this.setState({redirect:true})
+    }
+  }
+
+  handleLogout() {
+    sessionStorage.setItem("user","");
+    sessionStorage.clear();
+    this.setState({redirect:true})
+  }
+
+  render(){
+    if (this.state.redirect) {
+      return (<Redirect to={"/login"} />)
+    }
+    return(
+        <Layout className="header">
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Brand href="">SMOKIN' ACE</Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
+              <Link className='nav-link' to="/">Home</Link>
+              <Link className='nav-link' to="/trip">Record</Link>
+              <Link className='nav-link' to="/">Shares</Link>
+              <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </Layout>
     );
   }
 }

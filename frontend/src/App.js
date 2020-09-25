@@ -14,8 +14,6 @@ class App extends React.Component {
     this.state = {
       redirect:false,
     }
-
-    this.handleLogout = this.handleLogout.bind(this)
   }
 
   UNSAFE_componentWillMount(){
@@ -26,12 +24,6 @@ class App extends React.Component {
     }
   }
 
-  handleLogout() {
-    sessionStorage.setItem("user","");
-    sessionStorage.clear();
-    this.setState({redirect:true})
-  }
-
   render(){
     if (this.state.redirect) {
       return (<Redirect to={"/login"} />)
@@ -39,7 +31,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <TripsTable />
-        <button onClick={this.handleLogout}>Logout</button>
       </div>
     )
   }

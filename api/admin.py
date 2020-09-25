@@ -4,5 +4,5 @@ from django.contrib import admin
 
 from .models import TripLoading, TripOffloading
 
-admin.site.register(TripLoading)
-admin.site.register(TripOffloading)
+# admin.site.register(TripLoading)
+# admin.site.register(TripOffloading)

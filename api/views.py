@@ -4,8 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 
 from .serializers import (
-						UserSerializer
-						,TripLoadingSerializer
+						TripLoadingSerializer
 						,TripOffloadingSerializer
 					)
 from .models import TripLoading,TripOffloading
