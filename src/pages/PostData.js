@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function PostData(type, data) {
 
-  let BaseUrl = "http://localhost:8000/account/"
+  let BaseUrl = "https://smokin-ace.herokuapp.com/account/"
 
   if (data==='') {
     return new Promise((resolve, reject) => {
