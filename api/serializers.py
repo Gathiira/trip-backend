@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import TripLoading,TripOffloading
+from .models import TripLoading,TripOffloading, UserContribution, SharesModel
 
 class TripOffloadingSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -16,6 +16,16 @@ class TripOffloadingSerializer(serializers.ModelSerializer):
 		extra_kwargs = {
 			'id': {'write_only': True},
 		}
+
+class UserContributionSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserContribution
+		fields =['user','contribution']
+
+class UserProfitShareSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = SharesModel
+		fields =['profit_share']
 
 class TripLoadingSerializer(serializers.HyperlinkedModelSerializer):
 	trip_offloading =  TripOffloadingSerializer(read_only=True)

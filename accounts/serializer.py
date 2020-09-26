@@ -2,10 +2,14 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-class UserSerializer(serializers.ModelSerializer):
+from api.serializers import UserContributionSerializer, UserProfitShareSerializer
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    contribution = UserContributionSerializer(read_only=True)
+    profit_per_user =  UserProfitShareSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ['username','is_staff','is_superuser']
+        fields = ['username','is_staff','is_superuser','contribution','profit_per_user']
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

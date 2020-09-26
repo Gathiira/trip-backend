@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 class TripLoading(models.Model):
 	# start trip loading details
@@ -8,7 +9,7 @@ class TripLoading(models.Model):
 
 	buying_price_per_kg = models.DecimalField(max_digits=19,decimal_places=2,default=1) #user input
 	total_weight_bought = models.DecimalField(max_digits=19,decimal_places=2,default=1, help_text='Enter the total weight bought') #user input
-	total_buying_price = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	total_buying_price = models.DecimalField(max_digits=19,decimal_places=2,default=1, editable=False)
 	loading_cost = models.DecimalField(max_digits=19,decimal_places=2, default=1) #user input
 	departure_date = models.DateField() #user input
 
@@ -41,13 +42,13 @@ class TripOffloading(models.Model):
 
 	selling_price_per_kg = models.DecimalField(max_digits=19,decimal_places=2) #user input
 	total_weight_sold = models.DecimalField(max_digits=19,decimal_places=2,default=1, help_text='Enter the total weight sold') #user input
-	total_selling_price = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	total_selling_price = models.DecimalField(max_digits=19,decimal_places=2,default=1,editable=False)
 	offloading_cost = models.DecimalField(max_digits=19,decimal_places=2) #user input
 	selling_date = models.DateField() #user input
 
 	broker_expenses = models.DecimalField(max_digits=19,decimal_places=2) #user input
-	total_expenses = models.DecimalField(max_digits=19,decimal_places=2,default=1)
-	profit_margin = models.DecimalField(max_digits=19,decimal_places=2,default=1)
+	total_expenses = models.DecimalField(max_digits=19,decimal_places=2,default=1,editable=False)
+	profit_margin = models.DecimalField(max_digits=19,decimal_places=2,default=1,editable=False)
 
 	comment = models.TextField(default='Enter comment if any',blank=True) #user input
 
@@ -58,7 +59,7 @@ class TripOffloading(models.Model):
 		return self.selling_price_per_kg * self.total_weight_sold
 
 	def __str__(self):
-		return 'Offloading '+self.trip_loading.title
+		return 'Offloading '+ self.trip_loading.title
 
 	def get_total_expenses(self):
 		return (self.trip_loading.get_loading_expense() 
@@ -74,3 +75,28 @@ class TripOffloading(models.Model):
 		self.total_expenses = self.get_total_expenses()
 		self.profit_margin = self.get_profit_margin()
 		super(TripOffloading, self).save(*args, **kwargs)
+
+class UserContribution(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, blank=False, related_name="name") # user select user among users
+	contribution = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
+
+	def __str__(self):
+		return self.user.username
+
+class SharesModel(models.Model):
+	contribution = models.OneToOneField(UserContribution, on_delete=models.CASCADE, blank=False, related_name="user_contribution")
+	total_capital = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
+	profit = models.OneToOneField(TripOffloading, on_delete=models.CASCADE, blank=False, related_name="profit") # user select profit
+	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1, editable=False)
+
+	def get_profit_share(self):
+		return (
+			(self.contribution.contribution/self.total_capital) * self.profit.profit_margin
+		)
+	
+	def __str__(self):
+		return self.contribution.user.username +' profit for ' + self.profit.trip_loading.title
+
+	def save(self, *args, **kwargs):
+		self.profit_share = self.get_profit_share()
+		super(SharesModel, self).save(*args, **kwargs)

@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {Redirect } from "react-router-dom";
+import {PostData} from '../pages/PostData';
 import { Layout } from 'antd';
 import { Link } from "react-router-dom";
 import { Navbar,Nav } from 'react-bootstrap';
@@ -20,8 +21,6 @@ class MainLayout extends Component {
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
                 <Link className='nav-link' to="/">Home</Link>
-                <Link className='nav-link' to="/trip">Record</Link>
-                <Link className='nav-link' to="/">Shares</Link>
                 <Link className='nav-link' to="/login">Login</Link>
                 </Nav>
               </Navbar.Collapse>
@@ -38,6 +37,8 @@ class Header extends Component {
     super(props);
     this.state = {
       redirect:false,
+      is_staff:false,
+      username:''
     }
 
     this.handleLogout = this.handleLogout.bind(this)
@@ -46,6 +47,12 @@ class Header extends Component {
   componentDidMount(){
     if (sessionStorage.getItem("user")) {
       console.log("user is authenticated, call user feed")
+
+      PostData('user','').then((resp) =>{
+        this.setState({is_staff:resp.data.is_staff, username:resp.data.username})
+      }).catch((err) =>{
+        alert('unauthorised access')
+      })
     } else {
       this.setState({redirect:true})
     }
@@ -58,6 +65,8 @@ class Header extends Component {
   }
 
   render(){
+    console.log(this.state.is_staff)
+
     if (this.state.redirect) {
       return (<Redirect to={"/login"} />)
     }
@@ -68,8 +77,11 @@ class Header extends Component {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
+              <Link className='nav-link' >Welcome, {this.state.username}</Link>
               <Link className='nav-link' to="/">Home</Link>
-              <Link className='nav-link' to="/trip">Record</Link>
+              {this.state.is_staff && (
+                <Link className='nav-link' to="/trip">Record</Link>
+              )}
               <Link className='nav-link' to="/">Shares</Link>
               <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>
             </Nav>
