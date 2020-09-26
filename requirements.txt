@@ -6,6 +6,7 @@ Django==3.0.3
 django-cors-headers==3.5.0
 django-rest-knox==4.1.0
 djangorestframework==3.11.0
+gunicorn==20.0.4
 isort==5.5.3
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
