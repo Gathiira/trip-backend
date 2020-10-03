@@ -5,6 +5,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import TripsTable from './pages/TripsTable';
+import Sample from './pages/Sample';
 
 
 class App extends React.Component {
@@ -30,7 +31,8 @@ class App extends React.Component {
     }
     return (
       <div className="App">
-        <TripsTable />
+        {/* <TripsTable /> */}
+        <Sample />
       </div>
     )
   }

@@ -1,0 +1,52 @@
+.trip {
+    margin-top: 45px;
+    background-color: white;
+    border:1px solid lightgoldenrodyellow;
+}
+
+.trip__select {
+    display: flex;
+}
+
+.trip__selectDropdown {
+    flex: 1;
+}
+
+.trip__selectSubmit {
+    flex: 0;
+}
+
+.trip__details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.trip__detailsLoading {
+    padding: 10px;
+    flex: 1;
+    border:1px solid lightgoldenrodyellow;
+
+}
+
+.trip__detailsMore {
+    border:1px solid lightgoldenrodyellow;
+    padding: 10px;
+    flex: 1;
+}
+
+.trip__detailsOffloading {
+    border:1px solid lightgoldenrodyellow;
+    padding: 10px;
+    flex: 1;
+}
+
+.trip__shares {
+    border:1px solid lightgoldenrodyellow;
+    padding: 10px;
+    flex: 1;
+}
+
+.trip__detailsMore__title {
+    text-align: center;
+}
