@@ -76,22 +76,15 @@ class TripOffloading(models.Model):
 		self.profit_margin = self.get_profit_margin()
 		super(TripOffloading, self).save(*args, **kwargs)
 
-class UserContribution(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, blank=False, related_name="name") # user select user among users
-	contribution = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
-
-	def __str__(self):
-		return self.user.username
-
 class SharesModel(models.Model):
-	contribution = models.OneToOneField(UserContribution, on_delete=models.CASCADE, blank=False, related_name="user_contribution")
-	total_capital = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
+	user = models.OneToOneField(User, on_delete=models.CASCADE, blank=False, related_name="name")
 	profit = models.OneToOneField(TripOffloading, on_delete=models.CASCADE, blank=False, related_name="profit") # user select profit
+	contribution = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
 	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1, editable=False)
 
 	def get_profit_share(self):
 		return (
-			(self.contribution.contribution/self.total_capital) * self.profit.profit_margin
+			(self.contribution/self.profit.total_expenses) * self.profit.profit_margin
 		)
 	
 	def __str__(self):

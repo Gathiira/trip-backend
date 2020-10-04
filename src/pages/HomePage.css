@@ -4,18 +4,6 @@
     border:1px solid lightgoldenrodyellow;
 }
 
-.trip__select {
-    display: flex;
-}
-
-.trip__selectDropdown {
-    flex: 1;
-}
-
-.trip__selectSubmit {
-    flex: 0;
-}
-
 .trip__details {
     width: 100%;
     display: flex;

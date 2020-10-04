@@ -4,8 +4,7 @@ import {Redirect } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import TripsTable from './pages/TripsTable';
-import Sample from './pages/Sample';
+import HomePage from './pages/HomePage';
 
 
 class App extends React.Component {
@@ -31,8 +30,7 @@ class App extends React.Component {
     }
     return (
       <div className="App">
-        {/* <TripsTable /> */}
-        <Sample />
+        <HomePage />
       </div>
     )
   }

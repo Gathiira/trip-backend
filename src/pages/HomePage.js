@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ApiCall } from './ApiCall';
 
-import './Sample.css';
+import './HomePage.css';
 
 class Sample extends Component {
 
@@ -17,7 +17,6 @@ class Sample extends Component {
 
         this.renderOptions = this.renderOptions.bind(this)
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -56,37 +55,19 @@ class Sample extends Component {
             console.log(err);
         })
     }
-
-    handleSubmit(event) {
-        event.preventDefault();
-
-        ApiCall("loading/"+this.state.selected +"/",'')
-        .then(result =>{
-            this.setState({trips:result.data});
-            this.setState({loaded:true})
-            console.log(this.state.trips);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    }
-    
-
+ 
     render() {
         return (
             <>
             <div className='trip container'>
                 <div>
-                    <form onSubmit={this.handleSubmit}>
+                    <form>
                         <label>Select A trip to display Information</label>        
                         <div className="trip__select">
                             <div className="trip__selectDropdown">
                                 <select value={this.state.value} onChange={this.handleChange}>
                                     {this.renderOptions()}
                                 </select>
-                            </div>
-                            <div className="trip__selectSubmit">
-                                <input type="submit" value="Submit" />
                             </div>
                         </div>
                     </form>
