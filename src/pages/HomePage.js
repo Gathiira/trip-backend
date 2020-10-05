@@ -62,7 +62,7 @@ class Sample extends Component {
             <div className='trip container'>
                 <div>
                     <form>
-                        <label>Select A trip to display Information</label>        
+                        <label>Select A trip to display Information</label>
                         <div className="trip__select">
                             <div className="trip__selectDropdown">
                                 <select value={this.state.value} onChange={this.handleChange}>

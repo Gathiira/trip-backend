@@ -6,8 +6,9 @@ from rest_framework import permissions
 from .serializers import (
 						TripLoadingSerializer
 						,TripOffloadingSerializer
+						,UserProfitShareSerializer
 					)
-from .models import TripLoading,TripOffloading
+from .models import TripLoading,TripOffloading,SharesModel
 
 class TripLoadingViewSet(ModelViewSet):
 	serializer_class = TripLoadingSerializer
@@ -18,4 +19,9 @@ class TripLoadingViewSet(ModelViewSet):
 class TripOffloadingViewSet(ModelViewSet):
 	serializer_class = TripOffloadingSerializer
 	queryset = TripOffloading.objects.all()
+	lookup_field = 'id'
+
+class UserProfitShareViewSet(ModelViewSet):
+	serializer_class = UserProfitShareSerializer
+	queryset = SharesModel.objects.all()
 	lookup_field = 'id'

@@ -4,9 +4,10 @@ from .models import TripLoading,TripOffloading, SharesModel
 class UserProfitShareSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = SharesModel
-		fields =['profit_share']
+		fields =['user','offloading','contribution','profit_share']
 
-class TripOffloadingSerializer(serializers.ModelSerializer):
+class TripOffloadingSerializer(serializers.HyperlinkedModelSerializer):
+	profit_shares =  UserProfitShareSerializer(read_only=True)
 	class Meta:
 		model = TripOffloading
 		fields =['trip_loading','transport_cost'
@@ -14,7 +15,7 @@ class TripOffloadingSerializer(serializers.ModelSerializer):
 				,'total_weight_sold','total_selling_price'
 				,'offloading_cost','broker_expenses'
 				,'total_expenses','profit_margin'
-				,'selling_date','comment']
+				,'selling_date','comment','profit_shares']
 
 		read_only_fields = ['total_selling_price','total_expenses','profit_margin']
 		
