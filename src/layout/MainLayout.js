@@ -77,10 +77,10 @@ class Header extends Component {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
-              <Link className='nav-link' >Welcome, {this.state.username}</Link>
+              <Link className='nav-link' to="" >Welcome, {this.state.username}</Link>
               <Link className='nav-link' to="/">Home</Link>
               {this.state.is_staff && (
-                <Link className='nav-link' to="/trip">Record</Link>
+                <Link className='nav-link' to="/record">Record</Link>
               )}
               <Link className='nav-link' to="/">Shares</Link>
               <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>

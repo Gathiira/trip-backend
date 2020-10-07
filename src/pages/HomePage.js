@@ -27,6 +27,15 @@ class Sample extends Component {
             console.log(err);
         })
     }
+    
+    componentDidMount() {
+        ApiCall("loading/",'').then(result =>{
+            this.setState({data:result.data});
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
 
     renderOptions () {
         return (
@@ -95,16 +104,6 @@ class ListContent extends Component {
         var trip = this.props.trips
         if (trip.trip_offloading === null){
             trip.trip_offloading = {}
-            trip.trip_offloading['selling_price_per_kg'] = 0
-            trip.trip_offloading['broker_expenses'] = 0
-            trip.trip_offloading['comment'] = 'Bado mzigo hijauzwa'
-            trip.trip_offloading['offloading_cost'] = 0
-            trip.trip_offloading['profit_margin'] = 0
-            trip.trip_offloading['selling_date'] = 0
-            trip.trip_offloading['total_expenses'] = 0
-            trip.trip_offloading['total_selling_price'] = 0
-            trip.trip_offloading['total_weight_sold'] = 0
-            trip.trip_offloading['transport_cost'] = 0
         }
 
         return (
@@ -161,10 +160,9 @@ class ListContent extends Component {
                         <div>
                             <h6>Profit Margin: <span>{trip.trip_offloading.profit_margin}</span></h6>
                             <hr />
-                            <h6>Duncan share: <span>0</span></h6>
-                            <h6>Martin share: <span>0</span></h6>
-                            <h6>Ken share: <span>0</span></h6>
-                            <h6>Jose share: <span>0</span></h6>
+                            {trip.trip_offloading.profits && trip.trip_offloading.profits.map((profit,key) => (
+                                <h6 key={key}>{profit.name}'s share: <span>{profit.profit_share}</span></h6>
+                            ))}
                         </div>
                     </div>
                 </div>

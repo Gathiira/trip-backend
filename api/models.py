@@ -77,10 +77,13 @@ class TripOffloading(models.Model):
 		super(TripOffloading, self).save(*args, **kwargs)
 
 class SharesModel(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, blank=False, related_name="name")
-	offloading = models.ForeignKey(TripOffloading, on_delete=models.CASCADE, blank=False, related_name="profit") # user select profit
+	offloading = models.ForeignKey(TripOffloading, on_delete=models.DO_NOTHING,related_name="profits") # user select profit
+	name = models.CharField(max_length=200)
 	contribution = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
 	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1) #, editable=False
+
+	def __unicode__(self):
+		return '%s: %s' % (name, self.profit_share)
 
 	def get_profit_share(self):
 		return (
@@ -88,7 +91,7 @@ class SharesModel(models.Model):
 		)
 	
 	def __str__(self):
-		return self.user.username +' profit for ' + self.offloading.trip_loading.title
+		return self.name +' profit for ' + self.offloading.trip_loading.title
 
 	def save(self, *args, **kwargs):
 		self.profit_share = self.get_profit_share()
