@@ -1,18 +1,33 @@
 import React from 'react'
 
 function Shares() {
-    return (
-        <div>
-            <h3>Add Member</h3>
-            <form>
-                <label>Name of member</label>
-                <input value='Jose'/>
 
-                <label>Contribution of member</label>
-                <input value='1000'/>
-            </form>
+  const [value, setValue] = useState(1)
+
+  const renderOptions = () => {
+
+  }
+
+  const handleChange = async(event) => {
+    setValue(event.target.value)
+  }
+
+  return (
+    <>
+    <div className='share container'>
+      <form>
+        <label>Select A trip to add members</label>
+        <div className="share__select">
+          <div className="share__selectDropdown">
+            <select value={value} onChange={handleChange()}>
+                {renderOptions()}
+            </select>
+          </div>
         </div>
-    )
+      </form>
+    </div>
+    </>
+  )
 }
 
 export default Shares;

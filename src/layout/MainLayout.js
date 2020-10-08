@@ -20,7 +20,6 @@ class MainLayout extends Component {
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
-                <Link className='nav-link' to="/">Home</Link>
                 <Link className='nav-link' to="/login">Login</Link>
                 </Nav>
               </Navbar.Collapse>
@@ -46,8 +45,6 @@ class Header extends Component {
 
   componentDidMount(){
     if (sessionStorage.getItem("user")) {
-      console.log("user is authenticated, call user feed")
-
       PostData('user','').then((resp) =>{
         this.setState({is_staff:resp.data.is_staff, username:resp.data.username})
       }).catch((err) =>{
@@ -65,8 +62,6 @@ class Header extends Component {
   }
 
   render(){
-    console.log(this.state.is_staff)
-
     if (this.state.redirect) {
       return (<Redirect to={"/login"} />)
     }
@@ -78,11 +73,12 @@ class Header extends Component {
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
               <Link className='nav-link' to="" >Welcome, {this.state.username}</Link>
-              <Link className='nav-link' to="/">Home</Link>
               {this.state.is_staff && (
+                <>
                 <Link className='nav-link' to="/record">Record</Link>
+                <Link className='nav-link' to="/">Shares</Link>
+                </>
               )}
-              <Link className='nav-link' to="/">Shares</Link>
               <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>
             </Nav>
           </Navbar.Collapse>

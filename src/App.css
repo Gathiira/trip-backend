@@ -1,36 +1,5 @@
 @import '~antd/dist/antd.css';
 
-body {margin: 0}
-
-h2 {
-  align-content: center;
-  color: #1890FF;
-}
-
-#table_data {
-  overflow: auto;
-}
-table th,
-table td {
-  margin: 0;
-  padding: 0.5rem;
-  border-bottom: 1px solid #ededed;
-  border-right: 1px solid #ededed;
-}
-table th:first-child,
-table td:first-child {
-  color: green;
-  border-right: 1px solid #ededed;
-}
-table th:last-child,
-table td:last-child {
-  color: red;
-  border-right: 1px solid #ededed;
-}
-table tr:nth-child(odd) {
-  background-color:  #f5f5f5;
-}
-table th {
-  position: sticky;
-  background: #CACACA;
+body {
+  margin: 0
 }

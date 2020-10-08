@@ -1,41 +1,65 @@
 .trip {
-    margin-top: 45px;
-    background-color: white;
-    border:1px solid lightgoldenrodyellow;
+    margin-top: 20px;
+}
+h3{
+  color: #1A73E8;
+}
+h6 {
+  color: #79589F;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.table tr {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table td {
+    padding: 0.5rem;
+}
+
+.table tr:nth-of-type(odd) {
+    background-color: #f3f2f8;
+}
+
+.trip__select {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border:1px solid lightgray;
+  padding: 10px;
+}
+.trip__selectTitle {
+  flex: 0.8;
 }
 
 .trip__details {
     width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between ;
 }
 
 .trip__detailsLoading {
-    padding: 10px;
+    padding-right: 10px;
     flex: 1;
-    border:1px solid lightgoldenrodyellow;
-
 }
 
 .trip__detailsMore {
-    border:1px solid lightgoldenrodyellow;
-    padding: 10px;
+  padding-right: 10px;
     flex: 1;
 }
 
 .trip__detailsOffloading {
-    border:1px solid lightgoldenrodyellow;
-    padding: 10px;
     flex: 1;
 }
 
 .trip__shares {
-    border:1px solid lightgoldenrodyellow;
-    padding: 10px;
     flex: 1;
 }
 
-.trip__detailsMore__title {
-    text-align: center;
+.trip__detailsTitle {
+  text-align: center;
 }

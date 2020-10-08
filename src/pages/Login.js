@@ -20,7 +20,6 @@ class Login extends Component {
     if (this.state.username && this.state.password) {
       PostData("login/",this.state).then((result) =>{
         let responseJson = result;
-        console.log(result.data)
         if (responseJson.user) {
           sessionStorage.setItem('token', responseJson.token);
           sessionStorage.setItem('user',responseJson);

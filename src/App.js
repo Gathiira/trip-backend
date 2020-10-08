@@ -18,7 +18,7 @@ class App extends React.Component {
 
   UNSAFE_componentWillMount(){
     if (sessionStorage.getItem("user")) {
-      console.log("user is authenticated, call user feed")
+      
     } else {
       this.setState({redirect:true})
     }
