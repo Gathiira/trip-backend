@@ -18,8 +18,8 @@ function TripRecording() {
 
   useEffect(() => {
     const getUser = async () => {
-      // await fetch("http://127.0.0.1:9000/account/user",{
-      await fetch("https://smokin-ace.herokuapp.com/account/user",{
+      await fetch("http://127.0.0.1:8000/account/user",{
+      // await fetch("https://smokin-ace.herokuapp.com/account/user",{
         headers: {
           'Authorization': `token ${sessionStorage.getItem('token')}`
         }

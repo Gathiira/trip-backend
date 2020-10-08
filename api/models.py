@@ -79,15 +79,25 @@ class TripOffloading(models.Model):
 class SharesModel(models.Model):
 	offloading = models.ForeignKey(TripOffloading, on_delete=models.DO_NOTHING,related_name="profits") # user select profit
 	name = models.CharField(max_length=200)
-	contribution = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user input
+	percentage = models.DecimalField(max_digits=19, decimal_places=2, default=1) # user inputs
 	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1) #, editable=False
 
 	def __unicode__(self):
 		return '%s: %s' % (name, self.profit_share)
 
+	# def get_profit_share(self):
+	# 	contrib = 0
+	# 	total = 0
+	# 	data = SharesModel.objects.all()
+	# 	for obj in data:
+	# 		contrib = obj.contribution
+	# 		total = total + obj.contribution
+
+	# 	print('This total --------',total)
+	# 	print('this is the contribution--------', self.contribution)
 	def get_profit_share(self):
 		return (
-			(self.contribution/self.offloading.total_expenses) * self.offloading.profit_margin
+			(float(self.percentage) * 0.01) * float(self.offloading.profit_margin)
 		)
 	
 	def __str__(self):
