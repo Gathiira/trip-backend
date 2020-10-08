@@ -2,8 +2,8 @@ import axios from "axios";
 
 export function PostData(type, data) {
 
-  // let BaseUrl = "https://smokin-ace.herokuapp.com/account/"
-  let BaseUrl = "http://127.0.0.1:9000/account/"
+  let BaseUrl = "https://smokin-ace.herokuapp.com/account/"
+  // let BaseUrl = "http://127.0.0.1:9000/account/"
 
   if (data==='') {
     return new Promise((resolve, reject) => {
