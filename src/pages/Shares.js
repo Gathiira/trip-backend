@@ -12,8 +12,8 @@ function Shares(props) {
 
   useEffect(() => {
     const getData = async() => {
-      // await fetch('http://127.0.0.1:8000/api/loading')
-      await fetch('https://smokin-ace.herokuapp.com/api/loading')
+      await fetch('http://127.0.0.1:8000/api/loading')
+      // await fetch('https://smokin-ace.herokuapp.com/api/loading')
       .then(resp => resp.json())
       .then(data => {
         setData(data)
@@ -28,8 +28,8 @@ function Shares(props) {
 
   useEffect(() => {
     const getShares = async() => {
-      // await fetch('http://127.0.0.1:8000/api/shares')
-      await fetch('https://smokin-ace.herokuapp.com/api/shares')
+      await fetch('http://127.0.0.1:8000/api/shares')
+      // await fetch('https://smokin-ace.herokuapp.com/api/shares')
       .then(resp => resp.json())
       .then(data => {
         setShares(data)
@@ -63,8 +63,8 @@ function Shares(props) {
   const handleSubmit = async(event) => {
     event.preventDefault()
 
-    // fetch('http://127.0.0.1:8000/api/shares/', {
-      fetch('https://smokin-ace.herokuapp.com/api/shares/', {
+    fetch('http://127.0.0.1:8000/api/shares/', {
+      // fetch('https://smokin-ace.herokuapp.com/api/shares/', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

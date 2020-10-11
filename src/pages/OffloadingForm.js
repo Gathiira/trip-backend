@@ -38,9 +38,10 @@ class OffloadingForm extends Component {
   }
 
   render(){
-    let optionItems = this.props.trips.map((id,i) =>
-        <option key={i}>{id}</option>
+    let optionItems = this.props.trips.map((trip,id) =>
+        <option key={id} value={trip.id}>{trip.title}</option>
     );
+
     const {
       trip_loading,
       comment,

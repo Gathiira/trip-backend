@@ -16,7 +16,12 @@ class TripsLoading extends Component {
     ApiCall("loading/",'')
     .then(res => {
       res.data.map((trip,id) => {
-        initialTrips.push(trip.id)
+        const obj = {
+          id:trip.id,
+          title:trip.title
+        }
+
+        initialTrips.push(obj)
         return trip
       });
       this.setState({
