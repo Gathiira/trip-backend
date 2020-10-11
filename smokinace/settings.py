@@ -25,8 +25,8 @@ SECRET_KEY = '-c1cg^-j%2l-e_-(0+ey030&yvz@^k$x@%w0pwgm#of%)qrqe+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'knox',
 ]
+
+AUTH_USER_MODEL = 'accounts.Member'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

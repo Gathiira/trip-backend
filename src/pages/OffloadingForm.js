@@ -29,8 +29,7 @@ class OffloadingForm extends Component {
   handleSubmit = e => {
     e.preventDefault()
     ApiCall("offloading/",this.state)
-    .then(res => {
-      alert("relax now, Data Captured")
+    .then(() => {
       this.setState({redirect:true})
     })
     .catch(() => {

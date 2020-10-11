@@ -17,7 +17,6 @@ class ListContent extends Component {
         }
 
         return (
-            <div>
                 <div key={trip['id']}>
                     <div className="trip__details">
                         <div className="trip__detailsLoading">
@@ -90,52 +89,51 @@ class ListContent extends Component {
                         </div>
                     </div>
                     <div className="trip__details">
-                    <div className="trip__detailsMore">
-                        <div className="trip__detailsTitle">
-                            <h6>MORE</h6>
-                        </div>
-                        <div className="table">
-                          <tr>
-                            <td>Transport Cost</td>
-                            <td><strong>{trip.trip_offloading.transport_cost}</strong></td>
-                          </tr>
-                          <tr>
-                            <td>Clearance Cost</td>
-                            <td><strong>{trip.trip_offloading.clearance_cost}</strong></td>
-                          </tr>
-                          <tr>
-                            <td>Broker Expense</td>
-                            <td><strong>{trip.trip_offloading.broker_expenses}</strong></td>
-                          </tr>
-                          <br />
-                          <tr>
-                            <td><strong>Total Expense</strong></td>
-                            <td><strong>{trip.trip_offloading.total_expenses}</strong></td>
-                          </tr>
-                        </div>
+                        <div className="trip__detailsMore">
+                            <div className="trip__detailsTitle">
+                                <h6>MORE</h6>
+                            </div>
+                            <div className="table">
+                            <tr>
+                                <td>Transport Cost</td>
+                                <td><strong>{trip.trip_offloading.transport_cost}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Clearance Cost</td>
+                                <td><strong>{trip.trip_offloading.clearance_cost}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Broker Expense</td>
+                                <td><strong>{trip.trip_offloading.broker_expenses}</strong></td>
+                            </tr>
+                            <br />
+                            <tr>
+                                <td><strong>Total Expense</strong></td>
+                                <td><strong>{trip.trip_offloading.total_expenses}</strong></td>
+                            </tr>
+                            </div>
 
-                    </div>
-                    <div className="trip__shares">
-                        <div className="trip__detailsTitle">
-                            <h6>SHARES</h6>
                         </div>
-                        <div className="table">
-                          <tr>
-                            <td><strong>Profit Margin</strong></td>
-                            <td><strong>{trip.trip_offloading.profit_margin}</strong></td>
-                          </tr>
-                          <hr />
-                            {trip.trip_offloading.profits && trip.trip_offloading.profits.map((profit,key) => (
-                              <tr  key={key}>
-                                <td>{profit.name}'s share</td>
-                                <td>{profit.profit_share}</td>
-                              </tr>
-                            ))}
+                        <div className="trip__shares">
+                            <div className="trip__detailsTitle">
+                                <h6>SHARES</h6>
+                            </div>
+                            <div className="table">
+                            <tr>
+                                <td><strong>Profit Margin</strong></td>
+                                <td><strong>{trip.trip_offloading.profit_margin}</strong></td>
+                            </tr>
+                            <hr />
+                                {trip.trip_offloading.profits && trip.trip_offloading.profits.map((profit,key) => (
+                                <tr key={key}>
+                                    <td>{profit.user}'s share</td>
+                                    <td>{profit.profit_share}</td>
+                                </tr>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
-            </div>
         )
     }
 }

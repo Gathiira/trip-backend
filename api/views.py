@@ -7,14 +7,16 @@ from .serializers import (
 						TripLoadingSerializer
 						,TripOffloadingSerializer
 						,UserProfitShareSerializer
+						,ProfitShareSerializer
 					)
 from .models import TripLoading,TripOffloading,SharesModel
 
 class TripLoadingViewSet(ModelViewSet):
 	serializer_class = TripLoadingSerializer
 	queryset = TripLoading.objects.all()
+	ordered_queryset = queryset.order_by('departure_date')
 	lookup_field = 'id'
-	ordering ='departure_date'
+	ordering_fields = ['departure_date', '-id']
 
 class TripOffloadingViewSet(ModelViewSet):
 	serializer_class = TripOffloadingSerializer
@@ -23,5 +25,10 @@ class TripOffloadingViewSet(ModelViewSet):
 
 class UserProfitShareViewSet(ModelViewSet):
 	serializer_class = UserProfitShareSerializer
+	queryset = SharesModel.objects.all().select_related('user')
+	lookup_field = 'id'
+
+class ProfitShareViewSet(ModelViewSet):
+	serializer_class = ProfitShareSerializer
 	queryset = SharesModel.objects.all().select_related('offloading')
 	lookup_field = 'id'

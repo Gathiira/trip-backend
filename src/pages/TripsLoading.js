@@ -29,7 +29,6 @@ class TripsLoading extends Component {
     ApiCall("loading/",this.state)
     .then(res => {
       console.log(res.data)
-      alert("relax now, Data Captured")
       this.setState({redirect:true})
     })
     .catch(() => {

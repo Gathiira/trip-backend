@@ -1,20 +1,21 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+
+from .models import Member
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
-        fields = ['username','is_staff','is_superuser']
+        model = Member
+        fields = ['username','is_staff']
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['username','email','password']
+        model = Member
+        fields = ['username','email','password','contribution','phone']
         extra_kwargs = {'password': {'write_only': True, 'required': True}}
     
     def create(self, validated_data):
-        user = User.objects.create_user(
+        user = Member.objects.create_user(
             validated_data['username'],
             validated_data['email'],
             validated_data['password'],

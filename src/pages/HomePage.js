@@ -8,8 +8,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Card,
-  CardContent
+  Card
 } from '@material-ui/core';
 
 function HomePage() {
@@ -61,32 +60,28 @@ function HomePage() {
   }
 
   return (
-      <div className='trip container'>
-          <div>
-            <div className="trip__select">
-              <div className="trip__selectTitle">
-                <h3>Select Trip to display Information </h3>
-              </div>
-              <div className="trip__selectDropdown">
-                <FormControl>
-                    <Select
-                    variant="outlined"
-                    value={selected}
-                    onChange={handleChange}>
-                        {data.map((trip) => (
-                          <MenuItem key={trip.id} value={trip.id}>{trip.title}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-              </div>
-            </div>
+      <div className='container col-md-10'>
+        <div className="trip__select">
+          <div className="trip__selectTitle">
+            <h3>Select Trip to display Information </h3>
+          </div>
+          <div className="trip__selectDropdown">
+            <FormControl>
+                <Select
+                variant="outlined"
+                value={selected}
+                onChange={handleChange}>
+                    {data.map((trip) => (
+                      <MenuItem key={trip.id} value={trip.id}>{trip.title}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+          </div>
           </div>
           {loaded && (
             <Card>
-                <CardContent>
-                  <ListContent trips={trips} />
-                </CardContent>
-              </Card>
+              <ListContent trips={trips} />
+            </Card>
           )}
       </div>
   );
