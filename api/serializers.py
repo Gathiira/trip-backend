@@ -1,26 +1,31 @@
 from rest_framework import serializers
 from .models import TripLoading,TripOffloading, SharesModel
 
+from accounts.models import Member
+
+class ProfileSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Member
+		fields = ['id','username','percentage']
+
 class UserProfitShareSerializer(serializers.ModelSerializer):
+	name = ProfileSerializer(read_only=True, source='user')
 	class Meta:
 		model = SharesModel
-		fields =['id','offloading','user','profit_share']
+		fields =['id','offloading','user','name','profit_share']
 
 		read_only_fields = ['profit_share']
-
-class ProfitShareSerializer(serializers.ModelSerializer):
-	# profit_share = serializers.SerializerMethodField(method_name='calculate_profit')
-	user = serializers.SlugRelatedField(read_only=True, slug_field='username')
-	class Meta:
-		model = SharesModel
-		fields =['id','offloading','user','profit_share']
-
-		read_only_fields = ['profit_share']
-		
-
+	
+	# def create(self, validated_data):
+	# 	print('validate data ----->',validated_data)
+	# 	shares = SharesModel.objects.create(
+	# 		validated_data['offload'],
+	# 		validated_data['user']
+	# 	)
+	# 	return shares
 
 class TripOffloadingSerializer(serializers.ModelSerializer):
-	profits = ProfitShareSerializer(many=True,read_only=True)
+	profits = UserProfitShareSerializer(many=True,read_only=True)
 	class Meta:
 		model = TripOffloading
 		fields =['trip_loading','id','transport_cost'
@@ -40,7 +45,3 @@ class TripLoadingSerializer(serializers.HyperlinkedModelSerializer):
 				,'total_buying_price','loading_cost'
 				,'departure_date','comment']
 		read_only_fields = ['total_buying_price']
-
-	
-	def get_serializer_context(self):
-		pass

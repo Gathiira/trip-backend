@@ -1,4 +1,5 @@
 import uuid
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from accounts.models import Member
@@ -79,13 +80,10 @@ class TripOffloading(models.Model):
 
 class SharesModel(models.Model):
 	offloading = models.ForeignKey(TripOffloading, on_delete=models.DO_NOTHING,related_name="profits")
-	user = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='name')
+	user = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name='user')
 	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1) #, editable=False
 
-	def __unicode__(self):
-		return '%s: %s' % (self.user.username, self.profit_share)
-
-	def get_profit_share(self):
+	def get_profit_share(self):	
 		return (
 			(float(self.user.percentage) * 0.01) * float(self.offloading.profit_margin)
 		)
@@ -95,4 +93,5 @@ class SharesModel(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.profit_share = self.get_profit_share()
+		# self.full_clean()
 		super(SharesModel, self).save(*args, **kwargs)

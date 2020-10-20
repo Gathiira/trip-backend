@@ -126,8 +126,8 @@ class ListContent extends Component {
                             <hr />
                                 {trip.trip_offloading.profits && trip.trip_offloading.profits.map((profit,key) => (
                                 <tr key={key}>
-                                    <td>{profit.user}'s share</td>
-                                    <td>{profit.profit_share}</td>
+                                    <td>{ profit.name.username }'s share</td>
+                                    <td>{ profit.profit_share }</td>
                                 </tr>
                                 ))}
                             </div>

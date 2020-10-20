@@ -3,20 +3,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 
+from django.db.models import Q
+
 from .serializers import (
 						TripLoadingSerializer
 						,TripOffloadingSerializer
 						,UserProfitShareSerializer
-						,ProfitShareSerializer
 					)
 from .models import TripLoading,TripOffloading,SharesModel
 
 class TripLoadingViewSet(ModelViewSet):
 	serializer_class = TripLoadingSerializer
 	queryset = TripLoading.objects.all()
-	ordered_queryset = queryset.order_by('departure_date')
 	lookup_field = 'id'
-	ordering_fields = ['departure_date', '-id']
 
 class TripOffloadingViewSet(ModelViewSet):
 	serializer_class = TripOffloadingSerializer
@@ -25,10 +24,5 @@ class TripOffloadingViewSet(ModelViewSet):
 
 class UserProfitShareViewSet(ModelViewSet):
 	serializer_class = UserProfitShareSerializer
-	queryset = SharesModel.objects.all().select_related('user')
-	lookup_field = 'id'
-
-class ProfitShareViewSet(ModelViewSet):
-	serializer_class = ProfitShareSerializer
-	queryset = SharesModel.objects.all().select_related('offloading')
-	lookup_field = 'id'
+	queryset = SharesModel.objects.all()
+	lookup_field = 'offloading'

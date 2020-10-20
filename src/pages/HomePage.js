@@ -20,8 +20,7 @@ function HomePage() {
   useEffect(() => {
     const getData = async() =>{
       await ApiCall("loading/",'').then(result =>{
-          setData(result.data);
-      })
+          setData(result.data);      })
       .catch((err) => {
           console.log(err);
       })
@@ -36,6 +35,8 @@ function HomePage() {
       .then(result =>{
           setTrips(result.data);
           setLoaded(true)
+          console.log(result.data)
+
       })
       .catch((err) => {
           console.log(err);
@@ -53,6 +54,8 @@ function HomePage() {
         setTrips(result.data);
         setLoaded(true)
         setSelected(sValue)
+        console.log(result.data)
+
     })
     .catch((err) => {
         console.log(err);

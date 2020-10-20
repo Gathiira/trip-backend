@@ -40,7 +40,7 @@ function Shares(props) {
     }
 
     getShares();
-  }, [input.sharing])
+  }, [input])
 
 
 
@@ -49,7 +49,7 @@ function Shares(props) {
   )
 
   let userName = shares.map((share, id)=>(
-    <option key={id} value={id}>{share.user}</option>
+    <option key={id} value={share.name.id}>{share.name.username}</option>
   ))
 
   const handleChange = (event) => {
@@ -63,7 +63,7 @@ function Shares(props) {
   const handleSubmit = async(event) => {
     event.preventDefault()
 
-    fetch('http://127.0.0.1:8000/api/shares/', {
+    fetch('http://localhost:8000/api/shares/', {
       // fetch('https://smokin-ace.herokuapp.com/api/shares/', {
       method: 'post',
       headers: {
@@ -84,7 +84,8 @@ function Shares(props) {
   const renderTable = shares.map((share,id) => 
     <tr key={id}>
       <td>{share.offloading}</td>
-      <td>{share.user}</td>
+      <td>{share.name.username }</td>
+      <td>{share.name.percentage }</td>
       <td>{share.profit_share}</td>
     </tr>
   )
@@ -122,6 +123,7 @@ function Shares(props) {
                 <tr>
                   <th>Trip No.</th>
                   <th>Name</th>
+                  <th>Percentage</th>
                   <th>Profit</th>
                 </tr>
                 {renderTable}

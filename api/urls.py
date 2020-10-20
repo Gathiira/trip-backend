@@ -36,18 +36,12 @@ shares_detail = views.UserProfitShareViewSet.as_view({
     'delete': 'destroy',
 })
 
-
-view_shares_list = views.ProfitShareViewSet.as_view({
-    'get':'list'
-})
-
 urlpatterns = [
 	path('loading/', trip_loading_list,name='loading_list'),
 	path('loading/<int:id>/', trip_loading_detail,name='loading_details'),
-	path('offloading/', trip_offloading_list, name = 'offloading-detail'),
+	path('offloading/', trip_offloading_list, name = 'offloading-list'),
     path('offloading/<int:id>/', trip_offloading_detail, name='offloading-details'),
-	path('shares/', shares_list, name = 'shares-detail'),
-	path('view-shares/', view_shares_list, name = 'view-shares-detail'),
+	path('shares/', shares_list, name = 'shares-list'),
     path('shares/<int:id>/', shares_detail, name='shares-details'),
 ]
 

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 
 from .models import Member
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = ['username','is_staff']
