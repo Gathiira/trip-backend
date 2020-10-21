@@ -20,7 +20,7 @@ class MainLayout extends Component {
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
-                <Link className='nav-link' to="/login">Login</Link>
+                  <Link className='nav-link' to="/login">Login</Link>
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
@@ -72,33 +72,31 @@ class Header extends Component {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="navbar-nav ml-auto mt-2 mt-lg-0">
-              <Link className='nav-link' to="" >Welcome, {this.state.username}</Link>
-              {this.state.is_staff && (
-                <>
-                <Link className='nav-link' to="/record">Record</Link>
-                <Link className='nav-link' to="/">Shares</Link>
-                </>
-              )}
-              <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-      </Layout>
-    );
+                <Link className='nav-link' to="" >Welcome, {this.state.username}</Link>
+                {this.state.is_staff && (
+                  <>
+                    <Link className='nav-link' to="/record">Record</Link>
+                    <Link className='nav-link' to="/shares">Shares</Link>
+                  </>
+                )}
+                <Link className='nav-link' onClick={this.handleLogout} to="/login">Logout</Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </Layout>
+      );
   }
 }
 
 class Body extends Component {
   render(){
     return(
-      <div>
       <Layout>
           <Content>
               {this.props.content}
           </Content>
           <Footer className='text-center'>©2020</Footer>
       </Layout>
-      </div>
     );
   }
 }

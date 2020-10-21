@@ -13,7 +13,6 @@ export function ApiCall(type, data) {
       })
       .catch((error) =>{
         reject(error);
-        alert('Unable to fetch data')
       })
     });
   } else {
@@ -24,7 +23,6 @@ export function ApiCall(type, data) {
       })
       .catch((error) =>{
         reject(error);
-        alert('Unable to send data, Try again')
       })
     });
   }

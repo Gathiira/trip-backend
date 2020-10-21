@@ -29,8 +29,7 @@ class OffloadingForm extends Component {
   handleSubmit = e => {
     e.preventDefault()
     ApiCall("offloading/",this.state)
-    .then(res => {
-      alert("relax now, Data Captured")
+    .then(() => {
       this.setState({redirect:true})
     })
     .catch(() => {
@@ -39,9 +38,10 @@ class OffloadingForm extends Component {
   }
 
   render(){
-    let optionItems = this.props.trips.map((id,i) =>
-        <option key={i}>{id}</option>
+    let optionItems = this.props.trips.map((trip,id) =>
+        <option key={id} value={trip.id}>{trip.title}</option>
     );
+
     const {
       trip_loading,
       comment,

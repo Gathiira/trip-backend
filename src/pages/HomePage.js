@@ -8,8 +8,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Card,
-  CardContent
+  Card
 } from '@material-ui/core';
 
 function HomePage() {
@@ -21,8 +20,7 @@ function HomePage() {
   useEffect(() => {
     const getData = async() =>{
       await ApiCall("loading/",'').then(result =>{
-          setData(result.data);
-      })
+          setData(result.data);      })
       .catch((err) => {
           console.log(err);
       })
@@ -37,6 +35,8 @@ function HomePage() {
       .then(result =>{
           setTrips(result.data);
           setLoaded(true)
+          console.log(result.data)
+
       })
       .catch((err) => {
           console.log(err);
@@ -54,6 +54,8 @@ function HomePage() {
         setTrips(result.data);
         setLoaded(true)
         setSelected(sValue)
+        console.log(result.data)
+
     })
     .catch((err) => {
         console.log(err);
@@ -61,32 +63,28 @@ function HomePage() {
   }
 
   return (
-      <div className='trip container'>
-          <div>
-            <div className="trip__select">
-              <div className="trip__selectTitle">
-                <h3>Select Trip to display Information </h3>
-              </div>
-              <div className="trip__selectDropdown">
-                <FormControl>
-                    <Select
-                    variant="outlined"
-                    value={selected}
-                    onChange={handleChange}>
-                        {data.map((trip) => (
-                          <MenuItem key={trip.id} value={trip.id}>{trip.title}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-              </div>
-            </div>
+      <div className='container col-md-10'>
+        <div className="trip__select">
+          <div className="trip__selectTitle">
+            <h3>Select Trip to display Information </h3>
+          </div>
+          <div className="trip__selectDropdown">
+            <FormControl>
+                <Select
+                variant="outlined"
+                value={selected}
+                onChange={handleChange}>
+                    {data.map((trip) => (
+                      <MenuItem key={trip.id} value={trip.id}>{trip.title}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+          </div>
           </div>
           {loaded && (
             <Card>
-                <CardContent>
-                  <ListContent trips={trips} />
-                </CardContent>
-              </Card>
+              <ListContent trips={trips} />
+            </Card>
           )}
       </div>
   );

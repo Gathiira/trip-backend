@@ -29,7 +29,7 @@ class App extends React.Component {
       return (<Redirect to={"/login"} />)
     }
     return (
-      <div className="App">
+      <div className="app">
         <HomePage />
       </div>
     )

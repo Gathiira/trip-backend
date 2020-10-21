@@ -1,27 +1,28 @@
 from rest_framework import serializers
 from .models import TripLoading,TripOffloading, SharesModel
 
+from accounts.models import Member
+
+class ProfileSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Member
+		fields = ['id','username','percentage']
+
 class UserProfitShareSerializer(serializers.ModelSerializer):
-	# profit_share = serializers.SerializerMethodField(method_name='calculate_profit')
+	name = ProfileSerializer(read_only=True, source='user')
 	class Meta:
 		model = SharesModel
-		fields =['id','offloading','name','percentage','profit_share']
+		fields =['id','offloading','user','name','profit_share']
 
 		read_only_fields = ['profit_share']
-
-	# def calculate_profit(self,instance):
-	# 	total_capital = 0
-	# 	contribution = 0
-
-	# 	contributions = SharesModel.objects.all()
-	# 	for contrib in contributions:
-	# 		contribution = contrib.contribution
-	# 		total_capital = total_capital + contrib.contribution
-
-	# 	profit = contribution / total_capital * contrib.offloading.profit_margin
-	# 	return profit
-		
-
+	
+	# def create(self, validated_data):
+	# 	print('validate data ----->',validated_data)
+	# 	shares = SharesModel.objects.create(
+	# 		validated_data['offload'],
+	# 		validated_data['user']
+	# 	)
+	# 	return shares
 
 class TripOffloadingSerializer(serializers.ModelSerializer):
 	profits = UserProfitShareSerializer(many=True,read_only=True)

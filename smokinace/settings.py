@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'knox',
 ]
 
+AUTH_USER_MODEL = 'accounts.Member'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

@@ -17,7 +17,6 @@ export function PostData(type, data) {
       })
       .catch((error) =>{
         reject(error);
-        alert('wrong Authorization token')
       })
     });
   }
