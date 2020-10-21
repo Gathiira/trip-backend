@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 from .serializer import UserSerializer,RegisterSerializer, LoginSerializer
 
+from .models import Member
+
 # Create your views here.
 
 class RegisterAPIView(generics.GenericAPIView):
@@ -42,3 +44,9 @@ class UserAPIView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+class UsersAPIView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    queryset = Member.objects.all()
+    lookup_field = 'id'

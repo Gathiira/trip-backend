@@ -8,6 +8,7 @@ function Shares(props) {
     user: "",
   })
   const [shares, setShares] = useState([])
+  const [user, setUser] = useState([])
 
 
   useEffect(() => {
@@ -42,15 +43,37 @@ function Shares(props) {
     getShares();
   }, [input])
 
+  useEffect(() => {
+    const getUser = async() => {
 
+      await fetch('http://127.0.0.1:8000/account/users',{
+        headers: {
+          'Authorization': `token ${sessionStorage.getItem('token')}`
+        }
+      })
+      // await fetch('https://smokin-ace.herokuapp.com/api/shares')
+      .then(resp => resp.json())
+      .then(data => {
+        setUser(data)
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    }
+
+    getUser();
+  }, [])
+
+  console.log(user);
 
   let optionItems = data.map((trip,id) =>
     <option key={id} value={trip.id}>{trip.title}</option>
   )
 
-  let userName = shares.map((share, id)=>(
-    <option key={id} value={share.name.id}>{share.name.username}</option>
-  ))
+  let userName;
+  // let userName = user.map((user, id)=>(
+  //   <option key={id} value={user.id}>{user.username}</option>
+  // ))
 
   const handleChange = (event) => {
     const value = event.target.value;

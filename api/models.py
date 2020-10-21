@@ -1,6 +1,7 @@
 import uuid
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import post_save
 
 from accounts.models import Member
 
@@ -93,5 +94,15 @@ class SharesModel(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.profit_share = self.get_profit_share()
-		# self.full_clean()
-		super(SharesModel, self).save(*args, **kwargs)
+		print(self.id)
+		instance_exist = SharesModel.objects.filter(offloading=self.offloading, user=self.user).exists()
+		print(((not instance_exist) or self.id))
+		if (not instance_exist) or self.id:
+			super(SharesModel, self).save(*args, **kwargs)
+
+
+# def updating_values(sender, instance, **kwargs):
+#     instance.profile.save()
+
+
+# post_save.connect(updating_values, sender=User)
