@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, viewsets, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
 
@@ -45,7 +45,7 @@ class UserAPIView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-class UsersAPIView(generics.RetrieveAPIView):
+class UsersAPIView(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = Member.objects.all()

@@ -13,8 +13,8 @@ function Shares(props) {
 
   useEffect(() => {
     const getData = async() => {
-      await fetch('http://127.0.0.1:8000/api/loading')
-      // await fetch('https://smokin-ace.herokuapp.com/api/loading')
+      // await fetch('http://127.0.0.1:8000/api/loading')
+      await fetch('https://smokin-ace.herokuapp.com/api/loading')
       .then(resp => resp.json())
       .then(data => {
         setData(data)
@@ -29,8 +29,8 @@ function Shares(props) {
 
   useEffect(() => {
     const getShares = async() => {
-      await fetch('http://127.0.0.1:8000/api/shares')
-      // await fetch('https://smokin-ace.herokuapp.com/api/shares')
+      // await fetch('http://127.0.0.1:8000/api/shares')
+      await fetch('https://smokin-ace.herokuapp.com/api/shares')
       .then(resp => resp.json())
       .then(data => {
         setShares(data)
@@ -45,13 +45,12 @@ function Shares(props) {
 
   useEffect(() => {
     const getUser = async() => {
-
-      await fetch('http://127.0.0.1:8000/account/users',{
+      // await fetch('http://127.0.0.1:8000/account/users',{
+        await fetch('https://smokin-ace.herokuapp.com/account/users',{
         headers: {
           'Authorization': `token ${sessionStorage.getItem('token')}`
         }
       })
-      // await fetch('https://smokin-ace.herokuapp.com/api/shares')
       .then(resp => resp.json())
       .then(data => {
         setUser(data)
@@ -60,20 +59,16 @@ function Shares(props) {
         console.log(err);
       })
     }
-
     getUser();
   }, [])
-
-  console.log(user);
 
   let optionItems = data.map((trip,id) =>
     <option key={id} value={trip.id}>{trip.title}</option>
   )
 
-  let userName;
-  // let userName = user.map((user, id)=>(
-  //   <option key={id} value={user.id}>{user.username}</option>
-  // ))
+  let userName = user.map((user, id)=>(
+    <option key={id} value={user.id}>{user.username}</option>
+  ))
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -86,8 +81,8 @@ function Shares(props) {
   const handleSubmit = async(event) => {
     event.preventDefault()
 
-    fetch('http://localhost:8000/api/shares/', {
-      // fetch('https://smokin-ace.herokuapp.com/api/shares/', {
+    // fetch('http://localhost:8000/api/shares/', {
+      fetch('https://smokin-ace.herokuapp.com/api/shares/', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -99,9 +94,6 @@ function Shares(props) {
       // setState({redirect:false})
       console.log(err);
     })
-
-    console.log(JSON.stringify(input));
-
   }
 
   const renderTable = shares.map((share,id) => 

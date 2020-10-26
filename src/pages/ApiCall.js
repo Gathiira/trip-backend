@@ -2,8 +2,8 @@ import axios from "axios";
 
 export function ApiCall(type, data) {
 
-  // let BaseUrl = "https://smokin-ace.herokuapp.com/api/"
-  let BaseUrl = "http://127.0.0.1:8000/api/"
+  let BaseUrl = "https://smokin-ace.herokuapp.com/api/"
+  // let BaseUrl = "http://127.0.0.1:8000/api/"
 
   if (data==='') {
     return new Promise((resolve, reject) => {

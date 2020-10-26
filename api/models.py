@@ -80,8 +80,8 @@ class TripOffloading(models.Model):
 		super(TripOffloading, self).save(*args, **kwargs)
 
 class SharesModel(models.Model):
-	offloading = models.ForeignKey(TripOffloading, on_delete=models.DO_NOTHING,related_name="profits")
-	user = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name='user')
+	offloading = models.ForeignKey(TripOffloading, on_delete=models.CASCADE,related_name="profits")
+	user = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='user')
 	profit_share = models.DecimalField(max_digits=19, decimal_places=2, default=1) #, editable=False
 
 	def get_profit_share(self):	
@@ -94,15 +94,7 @@ class SharesModel(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.profit_share = self.get_profit_share()
-		print(self.id)
 		instance_exist = SharesModel.objects.filter(offloading=self.offloading, user=self.user).exists()
 		print(((not instance_exist) or self.id))
 		if (not instance_exist) or self.id:
 			super(SharesModel, self).save(*args, **kwargs)
-
-
-# def updating_values(sender, instance, **kwargs):
-#     instance.profile.save()
-
-
-# post_save.connect(updating_values, sender=User)

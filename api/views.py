@@ -25,4 +25,4 @@ class TripOffloadingViewSet(ModelViewSet):
 class UserProfitShareViewSet(ModelViewSet):
 	serializer_class = UserProfitShareSerializer
 	queryset = SharesModel.objects.all()
-	lookup_field = 'offloading'
+	lookup_field = 'id'
