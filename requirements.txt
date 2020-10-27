@@ -2,5 +2,6 @@ Django==3.0.3
 django-cors-headers==3.5.0
 django-rest-knox==4.1.0
 djangorestframework==3.11.0
-# uWSGI>=2.0.18,<2.1
+uWSGI>=2.0.18,<2.1
 whitenoise
+gunicorn
