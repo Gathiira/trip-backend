@@ -4,7 +4,7 @@ function Shares(props) {
 
   const [data, setData] = useState([])
   const [input, setInput] = useState({
-    offloading:'1',
+    offloading:'',
     user: "",
   })
   const [shares, setShares] = useState([])
@@ -117,6 +117,7 @@ function Shares(props) {
                   name="offloading"
                   value={input.offloading}
                   onChange={handleChange}>
+                  <option key={0} value={0}>select Trip</option>
                   {optionItems}
                 </select>
             </div>
@@ -126,6 +127,7 @@ function Shares(props) {
                   name="user"
                   value={input.user}
                   onChange={handleChange}>
+                  <option key={0} value={0}>select User</option>
                   {userName}
                 </select>
             </div>
