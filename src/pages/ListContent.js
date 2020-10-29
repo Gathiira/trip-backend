@@ -138,16 +138,16 @@ class ListContent extends Component {
                                 <td><strong>{trip.trip_offloading.profit_margin}</strong></td>
                             </tr>
                             <hr />
-                                {trip.trip_offloading.profits && trip.trip_offloading.profits.map((profit,key) => (
+                                {trip.trip_offloading.profits && trip.trip_offloading.profits.map((user,key) => (
                                 <tr key={key}>
-                                    <td>{ profit.name.username }'s share</td>
-                                    <td>{ profit.profit_share }</td>
+                                    <td>{ user.name.username }'s share</td>
+                                    <td>{ user.profit_share }</td>
                                 </tr>
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <button onClick={this.deleteTrip}>Delete Trip</button>
+                    {/* <button onClick={this.deleteTrip}>Delete Trip</button> */}
                 </div>
         )
     }
