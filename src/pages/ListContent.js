@@ -147,7 +147,6 @@ class ListContent extends Component {
                             </div>
                         </div>
                     </div>
-                    <button onClick={this.deleteTrip}>Delete Trip</button>
                 </div>
         )
     }
