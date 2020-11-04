@@ -24,10 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-c1cg^-j%2l-e_-(0+ey030&yvz@^k$x@%w0pwgm#of%)qrqe+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -98,7 +98,18 @@ WSGI_APPLICATION = 'smokinace.wsgi.application'
 #     }
 # }
 
-DATABASES = {}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'smokinace',
+        'USER': 'postgres',
+        'PASSWORD': 'avatar',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
