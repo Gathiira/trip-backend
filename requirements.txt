@@ -5,3 +5,5 @@ djangorestframework==3.11.0
 uWSGI>=2.0.18,<2.1
 whitenoise
 gunicorn
+psycopg2==2.7.5
+dj-database-url
