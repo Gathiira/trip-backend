@@ -3,45 +3,11 @@ from rest_framework.routers import DefaultRouter
 
 from . import views
 
-trip_loading_list = views.TripLoadingViewSet.as_view({
-    'get':'list',
-    'post':'create',
-})
 
-trip_loading_detail = views.TripLoadingViewSet.as_view({
-    'get':'retrieve',
-    'put':'update',
-    'delete': 'destroy',
-})
+router = DefaultRouter(trailing_slash=False) #
+router.register(r'loading', views.TripLoadingViewSet, 'loading')
+router.register(r'offloading', views.TripOffloadingViewSet, 'offloading')
+router.register(r'shares', views.UserProfitShareViewSet, 'shares')
 
-trip_offloading_list = views.TripOffloadingViewSet.as_view({
-    'get':'list',
-    'post':'create',
-})
-
-trip_offloading_detail = views.TripOffloadingViewSet.as_view({
-    'get':'retrieve',
-    'put':'update',
-    'delete': 'destroy',
-})
-
-shares_list = views.UserProfitShareViewSet.as_view({
-    'get':'list',
-    'post':'create',
-})
-
-shares_detail = views.UserProfitShareViewSet.as_view({
-    'get':'retrieve',
-    'put':'update',
-    'delete': 'destroy',
-})
-
-urlpatterns = [
-	path('loading/', trip_loading_list,name='loading_list'),
-	path('loading/<int:id>/', trip_loading_detail,name='loading_details'),
-	path('offloading/', trip_offloading_list, name = 'offloading-list'),
-    path('offloading/<int:id>/', trip_offloading_detail, name='offloading-details'),
-	path('shares/', shares_list, name = 'shares-list'),
-    path('shares/<int:id>/', shares_detail, name='shares-details'),
-]
+urlpatterns = router.urls
 
