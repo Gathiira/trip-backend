@@ -1,0 +1,14 @@
+Django==3.0.8
+django-cors-headers==3.5.0
+django-rest-knox==4.1.0
+djangorestframework==3.11.0
+python-dotenv==0.14.0
+django-redis==4.12.1
+django-filter==2.3.0
+drf-yasg==1.17.1
+psycopg2-binary==2.8.5
+rest-condition==1.0.3
+python-dateutil==2.8.1
+djangorestframework-simplejwt==4.4.0
+PyJWT==1.7.1
+requests==2.25.0

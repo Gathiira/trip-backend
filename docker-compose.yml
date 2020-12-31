@@ -1,0 +1,29 @@
+version: "3.5"
+services:
+  admin_app_gateway:
+    env_file:
+      - .env
+    build: .
+    image: smokinace_image:latest
+    command: bash -c "python3 manage.py runserver 0.0.0.0:5606"
+    ports:
+      - "5606:5606"
+    deploy:
+      update_config:
+        parallelism: 1
+        max_failure_ratio: 0
+        delay: 3s
+        failure_action: rollback
+      restart_policy:
+        max_attempts: 3
+        condition: on-failure
+      replicas: 3
+      placement:
+        constraints: [node.role == manager]
+    volumes:
+      - .:/smokinace
+    networks:
+      - smokinace_network
+networks:
+  smokinace_network:
+    external: true
