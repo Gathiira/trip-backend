@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.mail import EmailMessage
 
 class NotificationClass:
     def __init__(self):
@@ -11,11 +12,10 @@ class NotificationClass:
             self.communication_message_templates[
                 'END_TRIP_NOTIFICATION_MESSAGE']
 
-    def broad_cast_system_notification(self, incoming_payload, auth_headers):
-        payload = incoming_payload
-        # send emails
-        send_emails = True
-        if send_emails:
-            return True
-        else:
-            return False
+    def broad_cast_system_notification(self, payload):
+        subject = payload['email_subject']
+        body = payload['email_body']
+        receiver = payload['to_email']
+        
+        email = EmailMessage(subject=subject, body=body, to=[receiver])
+        email.send()
