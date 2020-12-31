@@ -1,1 +1,0 @@
-# The backend code for managing smokinace
