@@ -12,6 +12,9 @@ class NotificationClass:
         self.end_trip_notification_message = \
             self.communication_message_templates[
                 'END_TRIP_NOTIFICATION_MESSAGE']
+        self.trip_notification_subject = \
+            self.communication_message_templates[
+                'TRIP_NOTIFICATION_SUBJECT']
 
     def broad_cast_system_notification(self, payload):
         subject = payload['email_subject']

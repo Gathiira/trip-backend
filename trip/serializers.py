@@ -10,6 +10,8 @@ class GenericRequestSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.Serializer):
 	username = serializers.CharField()
+	percentage = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
 
 #  creating requests serializers
 class TripRequestSerializer(serializers.Serializer):
@@ -27,38 +29,23 @@ class TripLoadingRequestSerializer(TripRequestSerializer):
 		max_value=None, min_value=None,required=True)
 	departure_date = serializers.DateField()
 
-class TripOffloadingRequestSerializer(serializers.Serializer):
-	selling_price_per_kg = serializers.CharField(
-		max_length=255,required=True)
-	total_weight_sold = serializers.CharField(
-		max_length=255,required=True)
-	total_selling_price = serializers.CharField(
-		max_length=255,required=True)
-	offloading_cost = serializers.CharField(
-		max_length=255,required=True)
+class TripExpenseRequestSerializer(GenericRequestSerializer):
+	transport_cost = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
+	clearance_cost = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
+	broker_cost = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
+
+
+class TripOffloadingRequestSerializer(TripExpenseRequestSerializer):
+	selling_price_per_kg = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
+	total_weight_sold = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
+	offloading_cost = serializers.FloatField(
+		max_value=None, min_value=10,required=True)
 	selling_date = serializers.DateField()
-	
-	def validate_total_selling_price(self, value):
-		selling_price_per_kg = self.selling_price_per_kg
-		total_weight_sold = self.total_weight_sold
-
-		total_selling_price = selling_price_per_kg * total_weight_sold
-
-		return total_selling_price
-
-class TripExpenseRequestSerializer(serializers.Serializer):
-	transport_cost = serializers.CharField(
-		max_length=255,required=True)
-	clearance_cost = serializers.CharField(
-		max_length=255,required=True)
-	broker_cost = serializers.CharField(
-		max_length=255,required=True)
-
-class TripShareRequestSerializer(serializers.Serializer):
-	user = serializers.CharField(
-		max_length=255,required=True)
-	profit_share = serializers.CharField(
-		max_length=255,required=True)
 
 
 # detail view serializers
@@ -80,18 +67,18 @@ class ExpenseDetailSerializer(serializers.ModelSerializer):
 		fields = ['transport_cost','clearance_cost','broker_cost']
 
 class ShareDetailSerializer(serializers.ModelSerializer):
-	user = serializers.SerializerMethodField("get_user_details")
-	profit_share = serializers.SerializerMethodField("get_profit_share_details")
+	username = serializers.SerializerMethodField("get_username")
+	percentage = serializers.SerializerMethodField("get_percentage")
 
 	class Meta:
 		model = trip_models.TripShare
-		fields = ['user','profit_share']
+		fields = ['username','percentage','profit_share']
 
-	def get_user_details(self, obj):
-		user = obj.user
+	def get_username(self, obj):
+		user_id = obj.user
 		try:
 			user_details = account_models.User.objects.\
-				get(username=user)
+				get(id=user_id)
 		except Exception as e:
 			print(e)
 			return {}
@@ -102,35 +89,32 @@ class ShareDetailSerializer(serializers.ModelSerializer):
 		else:
 			return []
 
-	def get_profit_share_details(self, obj):
-		user = obj.user
+	def get_percentage(self, obj):
+		user_id = obj.user
 		try:
 			user_details = account_models.User.objects.\
-				get(username=user)
+				get(id=user_id)
 		except Exception as e:
 			print(e)
 			return {}
 
-		print(obj.process_request.trip_expense_details.all())
-
 		if user_details:
-			print(user_details.percentage)
+			user_record = UserSerializer(user_details, many=False).data
+			return user_record['percentage']
 		else:
-			pass
+			return []
 
 
 class TripDetailSerializer(serializers.ModelSerializer):
 	loading = serializers.SerializerMethodField("get_loading_details")
 	offloading = serializers.SerializerMethodField("get_offloading_details")
 	expense = serializers.SerializerMethodField("get_expense_details")
-	share = serializers.SerializerMethodField("get_share_details")
-	share = serializers.SerializerMethodField("get_share_details")
+	shares = serializers.SerializerMethodField("get_share_details")
 
 	class Meta:
 		model = trip_models.TripRequest
-		fields =['title','reference_number','status',
-				'loading','offloading','expense','share',
-				'total_expense']
+		fields =['title','reference_number','status','total_expense','profit_margin',
+				'loading','offloading','expense','shares']
 
 
 	def get_loading_details(self, obj):
@@ -164,6 +148,3 @@ class TripDetailSerializer(serializers.ModelSerializer):
 			return share_record
 		else:
 			return []
-
-	def get_total_expenses(self, obj):
-		pass

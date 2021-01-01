@@ -88,13 +88,13 @@ class TripViewSet(viewsets.ModelViewSet):
 					users = list(account_models.User.objects.values_list('email', flat=True))
 					title = process_request.title
 					reference_number = process_request.reference_number
-					date = process_request.date_created
+					subject = notification.trip_notification_subject
 
 					notification_message = notification.start_trip_notification_message.\
-						format(title, reference_number, date)
+						format(title, reference_number, departure_date)
 
 					message_payload = {
-						"email_subject":"SMOKIN ACE UPDATES",
+						"email_subject":subject,
 						"email_body":notification_message,
 						"to_email":users
 					}
@@ -165,3 +165,205 @@ class TripViewSet(viewsets.ModelViewSet):
 				serializer.errors,
 				status = status.HTTP_400_BAD_REQUEST)
 
+
+	@action(
+		methods=['POST'],
+		detail=False,
+		url_path='end-trip',
+		url_name='end-trip'
+	)
+	def end_trip(self, request):
+		payload = request.data
+		serializer = trip_serializers.TripOffloadingRequestSerializer(
+			data=payload, many=False
+		)
+
+		if serializer.is_valid():
+			with transaction.atomic():
+				request_id = payload['request_id']
+				filter_params = {
+					"id":request_id
+				}
+
+				try:
+					process_request = trip_models.TripRequest\
+						.objects.get(**filter_params)
+
+				except Exception as e:
+					print(e)
+					transaction.set_rollback(True)
+					return Response(
+						{"details":"Invalid Trip Request"},
+						status = status.HTTP_400_BAD_REQUEST)
+
+				selling_price_per_kg = payload['selling_price_per_kg']
+				total_weight_sold = payload['total_weight_sold']
+				total_selling_price = selling_price_per_kg * total_weight_sold
+				offloading_cost = payload['offloading_cost']
+				selling_date = payload['selling_date']
+
+				try:
+					loading_payload = {
+						"process_request":process_request,
+						"selling_price_per_kg":selling_price_per_kg,
+						"total_weight_sold":total_weight_sold,
+						"total_selling_price":total_selling_price,
+						"offloading_cost":offloading_cost,
+						"selling_date":selling_date
+					}
+					trip_models.TripOffloading.objects.create(
+						**loading_payload
+					)
+
+				except Exception as e:
+					print(e)
+					transaction.set_rollback(True)
+					return Response(
+						{"details":"Failed to end the trip"},
+						status = status.HTTP_400_BAD_REQUEST)
+
+				transport_cost = payload['transport_cost']
+				clearance_cost = payload['clearance_cost']
+				broker_cost = payload['broker_cost']
+
+				try:
+					expense_payload = {
+						"process_request":process_request,
+						"transport_cost":transport_cost,
+						"clearance_cost":clearance_cost,
+						"broker_cost":broker_cost
+					}
+
+					trip_models.TripExpense.objects.create(
+						**expense_payload
+					)
+
+				except Exception as e:
+					print(e)
+					transaction.set_rollback(True)
+					return Response(
+						{"details":"Failed to end the trip"},
+						status = status.HTTP_400_BAD_REQUEST)
+
+				
+				loading_cost = list(process_request.\
+					trip_loading_details.values_list('loading_cost', flat=True))[0]
+				
+				total_buying_price = list(process_request.\
+					trip_loading_details.values_list('total_buying_price', flat=True))[0]
+
+				total_expense = transport_cost + clearance_cost \
+					 + broker_cost + loading_cost + offloading_cost + total_buying_price
+
+				profit_margin = total_selling_price - total_expense
+
+				process_request.total_expense = total_expense
+				process_request.profit_margin = profit_margin
+				process_request.status = 'CLOSED'
+				process_request.save()
+
+				user_emails = []
+				try:
+					users = account_models.User.objects.all()
+					for user in users:
+						percentage = user.percentage
+
+						user_id = user.id
+						profit_share = (percentage/100) * profit_margin
+
+						share_payload = {
+							"process_request":process_request,
+							"user":user_id,
+							"profit_share":profit_share
+						}
+						email = user.email
+
+						user_emails.append(email)
+
+						trip_models.TripShare.objects.create(
+							**share_payload
+						)
+
+				except Exception as e:
+					print(e)
+					transaction.set_rollback(True)
+					return Response(
+						{"details":"Failed to calculate and record shares"},
+						status = status.HTTP_400_BAD_REQUEST)
+
+				try:
+					# send emails notification
+					title = process_request.title
+					reference_number = process_request.reference_number
+					subject = notification.trip_notification_subject
+
+					notification_message = notification.end_trip_notification_message.\
+						format(title, reference_number, selling_date, total_expense, profit_margin)
+
+					message_payload = {
+						"email_subject":subject,
+						"email_body":notification_message,
+						"to_email":user_emails
+					}
+					
+					notification.broad_cast_system_notification(
+						message_payload
+					)
+				except Exception as e:
+					print(e)
+					transaction.set_rollback(True)
+					return Response(
+						{"details":"Failed to send notifications"},
+						status = status.HTTP_400_BAD_REQUEST)
+
+				respose_info = {
+					"details":"Trip closed successfully"
+				}
+
+				return Response (
+					respose_info, status=status.HTTP_201_CREATED
+				)
+
+		else:
+			return Response(
+				serializer.errors,
+				status = status.HTTP_400_BAD_REQUEST)
+
+	@action(
+		methods=['DELETE'],
+		detail=False,
+		url_path='delete-trip',
+		url_name='delete-trip'
+	)
+	def delete_trip(self, request):
+		payload = request.query_params.dict()
+		serializer = trip_serializers.GenericRequestSerializer(
+			data=payload, many=False
+		)
+
+		if serializer.is_valid():
+			request_id = payload['request_id']
+			filter_params = {
+                "id": request_id
+            }
+
+			try:
+				process_request = trip_models.TripRequest.\
+					objects.get(**filter_params)
+			except Exception as e:
+				print(e)
+				return Response(
+					{"details":"Invalid Trip request"},
+					status=status.HTTP_400_BAD_REQUEST
+				)
+
+			process_request.delete()
+
+			return Response(
+				{"details":"Trip record deleted successfully"},
+				status=status.HTTP_200_OK
+			)
+		else:
+			return Response(
+				serializer.errors,
+				status = status.HTTP_400_BAD_REQUEST)
