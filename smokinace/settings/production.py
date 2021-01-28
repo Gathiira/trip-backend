@@ -9,15 +9,22 @@ elif os.environ.get('DEBUG_MODE') == 'False':
 
 ALLOWED_HOSTS = ['*']
 # 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DATABASE_NAME'),
+#         'USER': os.environ.get('DATABASE_USERNAME'),
+#         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+#         'ATOMIC_REQUESTS': True,
+#         'HOST': str(os.environ.get('DATABASE_HOST')),
+#         'PORT': int(os.environ.get('DATABASE_PORT'))
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USERNAME'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'ATOMIC_REQUESTS': True,
-        'HOST': str(os.environ.get('DATABASE_HOST')),
-        'PORT': int(os.environ.get('DATABASE_PORT'))
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 

@@ -91,7 +91,7 @@ class TripViewSet(viewsets.ModelViewSet):
 					subject = notification.trip_notification_subject
 
 					notification_message = notification.start_trip_notification_message.\
-						format(title, reference_number, departure_date)
+						format(title, reference_number, departure_date, total_buying_price)
 
 					message_payload = {
 						"email_subject":subject,
@@ -104,10 +104,7 @@ class TripViewSet(viewsets.ModelViewSet):
 					)
 				except Exception as e:
 					print(e)
-					transaction.set_rollback(True)
-					return Response(
-						{"details":"Failed to send notifications"},
-						status = status.HTTP_400_BAD_REQUEST)
+					pass
 
 				respose_info = {
 					"details":"Trip successfully started",
@@ -195,6 +192,14 @@ class TripViewSet(viewsets.ModelViewSet):
 					return Response(
 						{"details":"Invalid Trip Request"},
 						status = status.HTTP_400_BAD_REQUEST)
+				
+				trip_status = process_request.status
+				if trip_status=='CLOSED':
+					transaction.set_rollback(True)
+					return Response(
+						{"details": "Trip already closed"},
+						status=status.HTTP_400_BAD_REQUEST)
+
 
 				selling_price_per_kg = payload['selling_price_per_kg']
 				total_weight_sold = payload['total_weight_sold']
@@ -246,11 +251,11 @@ class TripViewSet(viewsets.ModelViewSet):
 						status = status.HTTP_400_BAD_REQUEST)
 
 				
-				loading_cost = list(process_request.\
-					trip_loading_details.values_list('loading_cost', flat=True))[0]
+				loading_cost = process_request.\
+					trip_loading_details.loading_cost
 				
-				total_buying_price = list(process_request.\
-					trip_loading_details.values_list('total_buying_price', flat=True))[0]
+				total_buying_price = process_request.\
+					trip_loading_details.total_buying_price
 
 				total_expense = transport_cost + clearance_cost \
 					 + broker_cost + loading_cost + offloading_cost + total_buying_price
@@ -311,10 +316,7 @@ class TripViewSet(viewsets.ModelViewSet):
 					)
 				except Exception as e:
 					print(e)
-					transaction.set_rollback(True)
-					return Response(
-						{"details":"Failed to send notifications"},
-						status = status.HTTP_400_BAD_REQUEST)
+					pass
 
 				respose_info = {
 					"details":"Trip closed successfully"

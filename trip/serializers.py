@@ -118,25 +118,37 @@ class TripDetailSerializer(serializers.ModelSerializer):
 
 
 	def get_loading_details(self, obj):
-		loading = obj.trip_loading_details.all()
+		try:
+			loading = obj.trip_loading_details
+		except Exception as e:
+			print(e)
+			return {}
 		if loading:
-			loading_record = LoadingDetailSerializer(loading, many=True).data
+			loading_record = LoadingDetailSerializer(loading, many=False).data
 			return loading_record
 		else:
 			return {}
 
 	def get_offloading_details(self, obj):
-		offloading = obj.trip_offloading_details.all()
+		try:
+			offloading = obj.trip_offloading_details
+		except Exception as e:
+			print(e)
+			return {}
 		if offloading:
-			offloading_record = OffloadingDetailSerializer(offloading, many=True).data
+			offloading_record = OffloadingDetailSerializer(offloading, many=False).data
 			return offloading_record
 		else:
 			return []
 
 	def get_expense_details(self, obj):
-		expense = obj.trip_expense_details.all()
+		try:
+			expense = obj.trip_expense_details
+		except Exception as e:
+			print(e)
+			return {}
 		if expense:
-			expense_record = ExpenseDetailSerializer(expense, many=True).data
+			expense_record = ExpenseDetailSerializer(expense, many=False).data
 			return expense_record
 		else:
 			return []

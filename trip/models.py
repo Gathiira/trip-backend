@@ -17,7 +17,7 @@ class TripRequest(models.Model):
 class TripLoading(models.Model):
 	# start trip loading details
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	process_request = models.ForeignKey(
+	process_request = models.OneToOneField(
 		TripRequest, on_delete=models.CASCADE,
 		related_name = 'trip_loading_details'
 	)
@@ -37,7 +37,7 @@ class TripLoading(models.Model):
 class TripOffloading(models.Model):
 	# End Trip offloading details
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	process_request = models.ForeignKey(
+	process_request = models.OneToOneField(
 		TripRequest, on_delete=models.CASCADE,
 		related_name='trip_offloading_details'
 	)
@@ -57,7 +57,7 @@ class TripOffloading(models.Model):
 class TripExpense(models.Model):
 	# Trip expenses details
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	process_request = models.ForeignKey(
+	process_request = models.OneToOneField(
 		TripRequest, on_delete=models.CASCADE,
 		related_name='trip_expense_details'
 	)

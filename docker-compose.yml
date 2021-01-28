@@ -5,9 +5,9 @@ services:
       - .env
     build: .
     image: smokinace_image:latest
-    command: bash -c "python3 manage.py runserver 0.0.0.0:5606"
+    command: bash -c "python3 manage.py runserver 0.0.0.0:6505"
     ports:
-      - "5606:5606"
+      - "6505:6505"
     deploy:
       update_config:
         parallelism: 1
