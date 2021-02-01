@@ -1,3 +1,7 @@
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from django.utils import timezone
 import random
 import string
 
@@ -17,3 +21,16 @@ def unique_reference_number_generator(model, process_prefix):
     if qs_exists:
         return unique_reference_number_generator(model, process_prefix=process_prefix)
     return reference_number
+
+
+def generate_pdf(message):
+    y = 700
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    p.setFont('Helvetica', 10)
+    p.drawString(220, y, message)
+    p.showPage()
+    p.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf

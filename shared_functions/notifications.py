@@ -1,6 +1,10 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
 
+from shared_functions import utility_functions
+
+utility_function = utility_functions
+
 class NotificationClass:
     
     def __init__(self):
@@ -20,6 +24,9 @@ class NotificationClass:
         subject = payload['email_subject']
         body = payload['email_body']
         receiver = payload['to_email']
-        
+        pdf = utility_function.generate_pdf(subject)
+
         email = EmailMessage(subject=subject, body=body, to=receiver)
+        email.attach('smokinace.pdf', pdf, 'application/pdf')
+        email.content_subtype = "html"
         email.send()
