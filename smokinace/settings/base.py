@@ -171,20 +171,19 @@ BASE_URL: 'localhost:8000/api/v1/account'
 # LOGOUT_URL = 'rest_framework:logout'
 
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS':{
-        'Bearer' : {
-            'type':'apiKey',
-            'name':'Authorization',
-            'in':'header'
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
         }
     }
 }
 
 
-
 #  email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_PORT =os.environ.get('EMAIL_PORT')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')

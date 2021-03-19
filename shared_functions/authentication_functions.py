@@ -2,18 +2,17 @@ import json
 from django.conf import settings
 from rest_framework import permissions
 import jwt
-import random
-import string
 
 from accounts import models as account_models
 
 
 def decode_jwt(jwt_code):
-    response= jwt.decode(jwt_code, settings.SECRET_KEY)
+    response = jwt.decode(jwt_code, settings.SECRET_KEY)
     return response
 
+
 def get_authentication_status(auth_headers):
-    payload = decode_jwt(auth_headers) 
+    payload = decode_jwt(auth_headers)
     try:
         user = account_models.User.objects.get(id=payload['user_id'])
         if user.is_verified:
@@ -29,7 +28,7 @@ def get_authentication_status(auth_headers):
         return False
 
 
-def check_role_status(request, role_name):
+def check_role_status(request, role_name, roles):
     if not request.headers.get('Authorization'):
         return False
 

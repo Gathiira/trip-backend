@@ -1,5 +1,6 @@
 from .base import *
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 if os.environ.get('DEBUG_MODE') == 'True':

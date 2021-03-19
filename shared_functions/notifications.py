@@ -5,8 +5,9 @@ from shared_functions import utility_functions
 
 utility_function = utility_functions
 
+
 class NotificationClass:
-    
+
     def __init__(self):
         self.communication_message_templates = \
             settings.NOTIFICATION_MESSAGE_TEMPLATES

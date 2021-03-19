@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if not username:
@@ -17,7 +18,6 @@ class UserManager(BaseUserManager):
 
         return user
 
-
     def create_superuser(self, username, email, password=None):
         if not password:
             raise TypeError("Password cannot be none")
@@ -26,6 +26,7 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.is_staff = True
         user.save()
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -64,7 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
-
 
 
 class UserProfile(models.Model):
