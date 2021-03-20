@@ -11,3 +11,4 @@ PyJWT==1.7.1
 python-dotenv==0.14.0
 reportlab==3.5.59
 requests==2.24.0
+django-rest-swagger==2.2.0
