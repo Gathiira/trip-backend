@@ -58,29 +58,32 @@ class UserViewSet(viewsets.ModelViewSet):
 
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
+        try:
+            current_site = get_current_site(request).domain
+            relative_link = reverse('user-verify_email')
 
-        current_site = get_current_site(request).domain
-        relative_link = reverse('user-verify_email')
+            absolute_url = 'http://' + current_site +\
+                relative_link + '?token=' + str(token)
 
-        absolute_url = 'http://' + current_site +\
-            relative_link + '?token=' + str(token)
+            email_body = 'Hi ' + user.username + \
+                "\nClick on the link below to verify your email\n\n"\
+                + absolute_url
 
-        email_body = 'Hi ' + user.username + \
-            "\nClick on the link below to verify your email\n\n"\
-            + absolute_url
+            payload = {
+                'email_body': email_body,
+                'to_email': [user.email],
+                'email_subject': "SMOKIN ACE EMAIL VERIFICATION"
+            }
 
-        payload = {
-            'email_body': email_body,
-            'to_email': [user.email],
-            'email_subject': "SMOKIN ACE EMAIL VERIFICATION"
-        }
-
-        notification.broad_cast_system_notification(payload)
-
-        print(token)
+            notification.broad_cast_system_notification(payload)
+        except Exception as e:
+            print(e)
+            pass
 
         return Response(
-            {"details": 'successfully created an account'},
+            {"details": 'successfully created an account',
+             "token": serializer.data
+             },
             status=status.HTTP_201_CREATED)
 
     @action(
