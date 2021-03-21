@@ -11,21 +11,15 @@ from django.utils.http import (
     urlsafe_base64_decode)
 from django.contrib.sites.shortcuts import get_current_site
 
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken
 
 import jwt
-import json
 
-from .serializer import (
-    UserSerializer,
-    LoginSerializer,
-    StaffSerializer,
-    PasswordResetSerializer
-)
-from .models import User
+from accounts import models as accounts_models
+from accounts import serializers as accounts_serializers
 from shared_functions import (
     renderers, notifications, authentication_functions)
 
@@ -49,9 +43,19 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         permission_classes = []
-        if self.action == 'register_user':
+        if self.action == 'get_user_details':
             permission_classes = [
                 authentication_function.is_authenticated(self.get_headers()), ]
+
+        if self.action == 'register_user':
+            permission_classes = [
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
+
+        if self.action == 'register_staff':
+            permission_classes = [
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
 
         return [permission() for permission in permission_classes]
 
@@ -62,11 +66,12 @@ class UserViewSet(viewsets.ModelViewSet):
         return headers
 
     def get_authenticated_user_id(self):
-        user_headers = self.request.headers.get('Authorization')
-        jwt_auth = user_headers.split(' ')[1]
-        decoded_jwt = authentication_function.decode_jwt(jwt_auth)
-        user = decoded_jwt['user_id']
-        return user
+        user_headers = self.get_headers()
+        decoded_jwt = authentication_function.decode_jwt(user_headers)
+        if decoded_jwt:
+            user = decoded_jwt['user_id']
+            return user
+        return False
 
     def get_application_process(self):
         process_name = "Trip Management"
@@ -78,9 +83,27 @@ class UserViewSet(viewsets.ModelViewSet):
         url_path='login',
         url_name='login')
     def login_user(self, request):
-        serializer = LoginSerializer(data=request.data)
+        serializer = accounts_serializers.LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        payload = serializer.validated_data
+        user_details = accounts_serializers.UserDetailsSerializer(
+            payload, many=False
+        ).data
+        return Response(user_details, status=status.HTTP_200_OK)
+
+    @action(
+        methods=['GET'],
+        detail=False,
+        url_path='get-authentication-status',
+        url_name='get-authentication-status')
+    def get_user_details(self, request):
+        user_id = self.get_authenticated_user_id()
+        user = accounts_models.User.objects.get(id=user_id)
+        user_details = accounts_serializers.AuthenticatedUserDetailsSerializer(
+            user, many=False
+        ).data
+        print(user_details)
+        return Response(user_details, status=status.HTTP_200_OK)
 
     @action(
         methods=['POST'], detail=False,
@@ -88,11 +111,11 @@ class UserViewSet(viewsets.ModelViewSet):
         url_name="register_user")
     def register_user(self, request):
         user_data = request.data
-        serializer = UserSerializer(data=user_data)
+        serializer = accounts_serializers.UserSerializer(data=user_data)
         serializer.is_valid(raise_exception=True)  # run validate method
         serializer.save()   # run create method
 
-        user = User.objects.get(email=user_data['email'])
+        user = accounts_models.User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
         try:
             current_site = get_current_site(request).domain
@@ -129,11 +152,11 @@ class UserViewSet(viewsets.ModelViewSet):
         url_name="register_staff")
     def register_staff(self, request):
         user_data = request.data
-        serializer = StaffSerializer(data=user_data)
+        serializer = accounts_serializers.StaffSerializer(data=user_data)
         serializer.is_valid(raise_exception=True)  # run validate method
         serializer.save()   # run create method
 
-        user = User.objects.get(email=user_data['email'])
+        user = accounts_models.User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
 
         current_site = get_current_site(request).domain
@@ -164,7 +187,7 @@ class UserViewSet(viewsets.ModelViewSet):
         token = reguest.GET.get('token')
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
-            user = User.objects.get(id=payload['user_id'])
+            user = accounts_models.User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
@@ -193,11 +216,12 @@ class UserViewSet(viewsets.ModelViewSet):
         url_path='reset-password',
         url_name='reset_password')
     def password_reset(self, request):
-        serializer = PasswordResetSerializer(data=request.data)
+        serializer = accounts_serializers.PasswordResetSerializer(
+            data=request.data)
 
         email = request.data['email']
-        if User.objects.filter(email=email).exists():
-            user = User.objects.get(email=email)
+        if accounts_models.User.objects.filter(email=email).exists():
+            user = accounts_models.User.objects.get(email=email)
             uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
 

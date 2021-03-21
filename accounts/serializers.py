@@ -40,16 +40,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class StaffProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StaffProfile
-        fields = ['first_name', 'last_name']
-
-
 class StaffSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=68, min_length=6, write_only=True)
-    staff_profile = StaffProfileSerializer(required=True)
+    staff_profile = UserProfileSerializer(required=True)
 
     class Meta:
         model = User
@@ -78,7 +72,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'is_staff', 'tokens']
+        fields = ['email', 'password']
 
         extra_kwargs = {
             'is_staff': {
@@ -96,12 +90,41 @@ class LoginSerializer(serializers.ModelSerializer):
                     'ACCOUNT DEACTIVATED, contact admin')
             if not user.is_verified:
                 raise AuthenticationFailed('Activate your email to login')
-            return {
-                'email': user.email,
+
+            response_obj = {
                 'is_staff': user.is_staff,
+                'username': user.username,
                 'tokens': user.tokens,
             }
+            return response_obj
+
         raise AuthenticationFailed("User not found, please REGISTER")
+
+
+class UserDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username', 'tokens']
+
+
+class AuthenticatedUserDetailsSerializer(serializers.ModelSerializer):
+    profile = serializers.SerializerMethodField('get_user_profile')
+
+    class Meta:
+        model = User
+        fields = ['username', 'is_staff', 'profile']
+
+    def get_user_profile(self, obj):
+        is_staff = obj.is_staff
+        user_profile = None
+        if is_staff:
+            user_profile = obj.staff_profile
+        else:
+            user_profile = obj.user_profile
+
+        profile_details = UserProfileSerializer(user_profile, many=False).data
+        return profile_details
 
 
 class PasswordResetSerializer(serializers.Serializer):

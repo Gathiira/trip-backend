@@ -25,7 +25,7 @@ class NotificationClass:
         subject = payload['email_subject']
         body = payload['email_body']
         receiver = payload['to_email']
-        pdf = utility_function.generate_pdf(subject)
+        pdf = utility_function.generate_pdf(subject, body)
 
         email = EmailMessage(subject=subject, body=body, to=receiver)
         email.attach('smokinace.pdf', pdf, 'application/pdf')

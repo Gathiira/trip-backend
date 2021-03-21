@@ -1,4 +1,4 @@
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from django.utils import timezone
@@ -23,12 +23,14 @@ def unique_reference_number_generator(model, process_prefix):
     return reference_number
 
 
-def generate_pdf(message):
-    y = 700
+def generate_pdf(title, body):
+    y = 800
     buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
+    p = canvas.Canvas(buffer, pagesize=A4)
+    p.setFont('Helvetica-Bold', 10)
+    p.drawString(220, y, title)
     p.setFont('Helvetica', 10)
-    p.drawString(220, y, message)
+    p.drawString(50, 780, body)
     p.showPage()
     p.save()
     pdf = buffer.getvalue()
