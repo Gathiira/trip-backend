@@ -14,6 +14,22 @@ class UserSerializer(serializers.Serializer):
     percentage = serializers.FloatField(
         max_value=None, min_value=10, required=True)
 
+
+class ListTripRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = trip_models.TripRequest
+        fields = [
+            'id',
+            'title',
+            'reference_number',
+            'total_expense',
+            'profit_margin',
+            'status',
+            'date_created',
+        ]
+
+
 #  creating requests serializers
 
 
@@ -112,7 +128,7 @@ class ShareDetailSerializer(serializers.ModelSerializer):
             return []
 
 
-class TripDetailSerializer(serializers.ModelSerializer):
+class TripDetailSerializer(ListTripRequestSerializer):
     loading = serializers.SerializerMethodField("get_loading_details")
     offloading = serializers.SerializerMethodField("get_offloading_details")
     expense = serializers.SerializerMethodField("get_expense_details")
@@ -120,8 +136,12 @@ class TripDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = trip_models.TripRequest
-        fields = ['title', 'reference_number', 'status', 'total_expense', 'profit_margin',
-                  'loading', 'offloading', 'expense', 'shares']
+        fields = ListTripRequestSerializer.Meta.fields + [
+            'loading',
+            'offloading',
+            'expense',
+            'shares'
+        ]
 
     def get_loading_details(self, obj):
         try:

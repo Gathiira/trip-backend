@@ -6,18 +6,104 @@ from rest_framework.response import Response
 
 from shared_functions import (
     notifications,
-    utility_functions
+    utility_functions,
+    authentication_functions
 )
 from trip import models as trip_models
 from trip import serializers as trip_serializers
-
+from trip.analytics import trip_analytics
 from accounts import models as account_models
 
 utility_function = utility_functions
 notification = notifications.NotificationClass()
+authentication_function = authentication_functions
+trip_analytic = trip_analytics
 
 
 class TripViewSet(viewsets.ModelViewSet):
+    search_fields = ['reference_number']
+    serializer_class = trip_serializers.ListTripRequestSerializer
+
+    def get_serializer_context(self):
+        context = self.get_headers()
+        context.update({
+            "user": self.get_authenticated_user_id()
+        })
+        return context
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'list':
+            permission_classes = [
+                authentication_function.is_authenticated(
+                    self.get_headers()), ]
+
+        if self.action == 'start_trip':
+            permission_classes = [
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
+
+        if self.action == 'end_trip':
+            permission_classes = [
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
+
+        if self.action == 'delete_trip':
+            permission_classes = [
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
+
+        if self.action == 'detail_view':
+            permission_classes = [
+                authentication_function.role_required(
+                    "PUBLIC", self.get_headers()) |
+                authentication_function.role_required(
+                    "STAFF", self.get_headers()), ]
+
+        return [permission() for permission in permission_classes]
+
+    def get_headers(self):
+        headers = {
+            'Authorization': self.request.headers.get('Authorization')
+        }
+        return headers
+
+    def get_authenticated_user_id(self):
+        user_headers = self.get_headers()
+        decoded_jwt = authentication_function.decode_jwt(user_headers)
+        if decoded_jwt:
+            user = decoded_jwt['user_id']
+            return user
+        return False
+
+    def get_application_process(self):
+        process_name = "Trip Management"
+        return process_name
+
+    def get_queryset(self):
+        application_status = self.request.query_params.get('filter')
+        if application_status is None:
+            return []
+
+        request_status = application_status.upper()
+        allowed_filters = ['ONGOING', 'COMPLETED']
+        trip_analytic_class = trip_analytic.Trip(page_size=20)
+
+        if request_status not in allowed_filters:
+            return []
+        else:
+            if request_status == "ONGOING":
+                query_set_data = trip_analytic_class. \
+                    get_ongoing_requests()[
+                        'query_set']
+                del trip_analytic_class
+                return query_set_data
+            if request_status == "COMPLETED":
+                query_set_data = trip_analytic_class. \
+                    get_completed_requests()[
+                        'query_set']
+                del trip_analytic_class
+                return query_set_data
 
     @action(
         methods=['POST'],
@@ -135,6 +221,7 @@ class TripViewSet(viewsets.ModelViewSet):
         )
 
         if serializer.is_valid():
+            print(self.get_authenticated_user_id())
             request_id = payload['request_id']
             filter_params = {
                 "id": request_id
@@ -194,10 +281,10 @@ class TripViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_400_BAD_REQUEST)
 
                 trip_status = process_request.status
-                if trip_status == 'CLOSED':
+                if trip_status == 'COMPLETED':
                     transaction.set_rollback(True)
                     return Response(
-                        {"details": "Trip already closed"},
+                        {"details": "Trip already complete"},
                         status=status.HTTP_400_BAD_REQUEST)
 
                 selling_price_per_kg = payload['selling_price_per_kg']
@@ -263,7 +350,7 @@ class TripViewSet(viewsets.ModelViewSet):
 
                 process_request.total_expense = total_expense
                 process_request.profit_margin = profit_margin
-                process_request.status = 'CLOSED'
+                process_request.status = 'COMPLETED'
                 process_request.save()
 
                 user_emails = []
@@ -320,7 +407,7 @@ class TripViewSet(viewsets.ModelViewSet):
                     pass
 
                 respose_info = {
-                    "details": "Trip closed successfully"
+                    "details": "Trip completed successfully"
                 }
 
                 return Response(

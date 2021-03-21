@@ -93,6 +93,13 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://127.0.0.1:3000',
+#     'http://127.0.0.1:8001',
+#     'http://192.168.0.103:3000',
+#     'http://localhost:3030',
+# )
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -166,8 +173,8 @@ SIMPLE_JWT = {
 }
 
 # swagger configurations
-LOGIN_URL = 'account-login'
-BASE_URL: 'localhost:8000/api/v1/account'
+LOGIN_URL = 'account/user/login'
+# BASE_URL: '/api/v1/account'
 # LOGOUT_URL = 'rest_framework:logout'
 
 SWAGGER_SETTINGS = {

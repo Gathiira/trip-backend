@@ -26,15 +26,51 @@ from .serializer import (
     PasswordResetSerializer
 )
 from .models import User
-from shared_functions import (renderers, notifications)
+from shared_functions import (
+    renderers, notifications, authentication_functions)
 
 notification = notifications.NotificationClass()
 renderer = renderers
 
+authentication_function = authentication_functions
+
 
 class UserViewSet(viewsets.ModelViewSet):
+    search_fields = ['reference_number']
+
+    def get_serializer_context(self):
+        context = self.get_headers()
+        context.update({
+            "user": self.get_authenticated_user_id()
+        })
+        return context
 
     renderer_classes = (renderer.UserRenderer,)
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'register_user':
+            permission_classes = [
+                authentication_function.is_authenticated(self.get_headers()), ]
+
+        return [permission() for permission in permission_classes]
+
+    def get_headers(self):
+        headers = {
+            'Authorization': self.request.headers.get('Authorization')
+        }
+        return headers
+
+    def get_authenticated_user_id(self):
+        user_headers = self.request.headers.get('Authorization')
+        jwt_auth = user_headers.split(' ')[1]
+        decoded_jwt = authentication_function.decode_jwt(jwt_auth)
+        user = decoded_jwt['user_id']
+        return user
+
+    def get_application_process(self):
+        process_name = "Trip Management"
+        return process_name
 
     @action(
         methods=['POST'],
