@@ -122,8 +122,7 @@ class TripViewSet(viewsets.ModelViewSet):
                 title = payload['title']
                 reference_number = utility_function.\
                     unique_reference_number_generator(
-                        model=trip_models.TripRequest,
-                        process_prefix='TRIP'
+                        model=trip_models.TripRequest
                     )
 
                 try:
