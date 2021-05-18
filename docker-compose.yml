@@ -22,8 +22,3 @@ services:
         constraints: [node.role == manager]
     volumes:
       - .:/smokinace
-    networks:
-      - smokinace_network
-networks:
-  smokinace_network:
-    external: true
